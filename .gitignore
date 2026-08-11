@@ -1,0 +1,15 @@
+# Environment files - DO NOT COMMIT
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+/dist/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE
+.vscode/
+.idea/
