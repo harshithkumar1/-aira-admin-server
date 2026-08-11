@@ -244,13 +244,11 @@ const STORAGE_KEYS = {
 };
 
 // GitHub Gist API configuration
-// You need to:
-// 1. Create a GitHub Gist
-// 2. Get your Gist ID
-// 3. Get a GitHub Personal Access Token (free)
-// 4. Update GIST_ID below
-const GIST_ID = ''; // Your Gist ID
+// TODO: Replace 'YOUR_TOKEN_HERE' with your actual GitHub Personal Access Token
+// This makes the dashboard fully automated - no user setup needed
+const GIST_ID = 'b5946a18f759e1526fd9a287edcdb91d';
 const GIST_FILE = 'dashboard-data.json';
+const GITHUB_TOKEN = '⟦SECRET_REDACTED⟧'; // <-- Replace with your actual token
 
 // Debounce timer for auto-save
 let autoSaveTimer = null;
@@ -291,9 +289,9 @@ function saveToStorage(autoSave = false) {
     
     window.SAVED_DASHBOARD_FIELDS = fields;
     window.SAVED_DIMENSION_DATA = dimensionData;
-    
-    // Auto-save to GitHub Gist (debounced)
-    if (autoSave && sessionStorage.getItem('github_token')) {
+
+    // Auto-save to GitHub Gist (debounced) - works automatically now
+    if (autoSave) {
         clearTimeout(autoSaveTimer);
         autoSaveTimer = setTimeout(() => {
             const dataToSave = {
@@ -309,10 +307,10 @@ function saveToStorage(autoSave = false) {
 }
 
 async function saveToGist(data) {
-    const token = sessionStorage.getItem('github_token');
+    const token = GITHUB_TOKEN; // Use hardcoded token
     
     if (!token || !GIST_ID) {
-        throw new Error('GitHub token or Gist ID not configured - see README.md');
+        throw new Error('GitHub token or Gist ID not configured - see app.js');
     }
     
     const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
@@ -340,7 +338,7 @@ async function saveToGist(data) {
 }
 
 async function loadFromGist() {
-    const token = sessionStorage.getItem('github_token');
+    const token = GITHUB_TOKEN; // Use hardcoded token
     
     if (!token || !GIST_ID) {
         return null;
@@ -452,20 +450,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add save/auto-sync button
     addSaveControls();
-    
-    // Sync button handler
-    const syncBtn = document.getElementById('sync-btn');
-    if (syncBtn) {
-        syncBtn.addEventListener('click', async () => {
-            syncBtn.textContent = '⏳ Syncing...';
-            const result = await syncWithServer();
-            showSaveIndicator();
-            syncBtn.textContent = result?.success ? '✅ Synced' : '✅ Saved';
-            setTimeout(() => {
-                syncBtn.textContent = '🔄 Sync';
-            }, 2000);
-        });
-    }
 });
 
 function initEditableCards() {

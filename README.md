@@ -2,9 +2,7 @@
 
 A responsive home inspection report dashboard with cloud storage support.
 
-## Cloud Storage Setup (Free GitHub Gist Solution)
-
-To save data across all users and persist after page refresh:
+## Cloud Storage Setup - One-Time Setup
 
 ### Step 1: Create a GitHub Gist
 1. Go to https://gist.github.com
@@ -40,39 +38,25 @@ To save data across all users and persist after page refresh:
 
 ### Step 4: Configure the Dashboard
 1. Open `app.js`
-2. Find the `GIST_ID` constant
-3. Replace `''` with your actual Gist ID:
+2. Find the `GIST_ID` constant and replace with your Gist ID:
    ```javascript
-   const GIST_ID = 'abc123def456...';
+   const GIST_ID = 'your_gist_id_here';
+   ```
+3. Find the `GITHUB_TOKEN` constant and replace with your token:
+   ```javascript
+   const GITHUB_TOKEN = 'your_token_here';
    ```
 
-### Step 5: Set Token in Browser
-Each user needs to enter their GitHub token once:
-
-1. Open browser console (F12 → Console)
-2. Paste and run:
-   ```javascript
-   sessionStorage.setItem('github_token', 'your_personal_access_token_here');
-   ```
-3. Or use this bookmarklet:
-   ```javascript
-   const token = prompt('Enter your GitHub Personal Access Token:');
-   if (token) sessionStorage.setItem('github_token', token);
-   ```
-
-### Step 6: Sync Data
-1. Make edits to dashboard cards
-2. Upload images
-3. Click the **🔄 Sync** button
-4. Data is now saved to your GitHub Gist
-
-### Step 7: Load on Other Devices
-Any user can access the data by:
-1. Setting the same GitHub token in `sessionStorage`
-2. Visiting the dashboard
-3. Data loads automatically
+That's it! The dashboard is now fully configured. No user setup required.
 
 ---
+
+## How It Works
+
+- **Auto-save**: Data saves automatically when you edit fields or upload images
+- **Images**: Photos are compressed for mobile-friendly sizes
+- **Auto-load**: Data loads automatically from GitHub Gist when the page opens
+- **Cross-device**: Works on any device with internet access
 
 ## Local Development
 
@@ -84,8 +68,8 @@ No backend required - works as static files on GitHub Pages, Netlify, or any sta
 - ✅ Inline editing for dashboard fields
 - ✅ Image upload with compression
 - ✅ Delete uploaded images
-- ✅ Auto-save to GitHub Gist
-- ✅ Sync button for manual sync
+- ✅ **Automatic save** to GitHub Gist (no sync button needed!)
+- ✅ **No user authentication** required
 - ✅ Progress indicator
 
 ## File Structure
