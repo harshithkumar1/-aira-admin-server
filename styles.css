@@ -622,6 +622,41 @@ body {
     border-bottom: 1px solid #F0F0F0;
 }
 
+.dimension-table tbody td input.dim-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    background: white;
+    cursor: text;
+    transition: border-color 0.2s;
+}
+
+.dimension-table tbody td input.dim-input:focus {
+    outline: none;
+    border-color: #2E86AB;
+    box-shadow: 0 0 0 2px rgba(46, 134, 171, 0.2);
+}
+
+.dimension-table tbody td select.dim-status {
+    padding: 6px 10px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.dimension-table tbody td select.dim-status:focus {
+    outline: none;
+    border-color: #2E86AB;
+    box-shadow: 0 0 0 2px rgba(46, 134, 171, 0.2);
+}
+
 .status-ok {
     color: #10B981;
     font-weight: 600;

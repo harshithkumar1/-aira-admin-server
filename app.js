@@ -460,18 +460,17 @@ function renderDimensionTable() {
         </thead>
         <tbody>
             ${DIMENSION_DATA.map((item, index) => {
-                const isOk = item.status === 'ok';
-                const statusColor = isOk ? 'green' : 'red';
-                const statusText = isOk ? '✅ Satisfactory' : '⚠️ Discrepancy';
                 return `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.area}</td>
-                        <td>${item.brochure}</td>
-                        <td>${item.measured}</td>
-                        <td style="color: ${statusColor};">
-                            ${statusText}
-                            ${item.comment && !isOk ? `<br><small style="color: #666;">${item.comment}</small>` : ''}
+                        <td><input type="text" class="dim-input" data-field="${index}-brochure" value="${item.brochure}"></td>
+                        <td><input type="text" class="dim-input" data-field="${index}-measured" value="${item.measured}"></td>
+                        <td>
+                            <select class="dim-status" data-field="${index}-status">
+                                <option value="ok" ${item.status === 'ok' ? 'selected' : ''}>Satisfactory</option>
+                                <option value="warn" ${item.status === 'warn' ? 'selected' : ''}>Discrepancy</option>
+                            </select>
                         </td>
                     </tr>
                 `;
