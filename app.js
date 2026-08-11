@@ -311,7 +311,7 @@ function saveToStorage() {
     localStorage.setItem(STORAGE_KEYS.IMAGES, JSON.stringify(imagesObj));
 }
 
-// Call sync API (placeholder for Netlify Functions)
+// Call sync API
 async function syncWithServer() {
     try {
         const data = {
@@ -320,17 +320,43 @@ async function syncWithServer() {
             images: JSON.parse(localStorage.getItem(STORAGE_KEYS.IMAGES) || '{}')
         };
         
-        // TODO: Implement actual API call to Netlify Functions
-        // For now, this is where you'd make a POST request to your sync endpoint
-        console.log('Syncing with server:', data);
+        const response = await fetch('/.netlify/functions/syncData', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
         
-        // Example: fetch('/.netlify/functions/syncData', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(data)
-        // });
+        const result = await response.json();
+        console.log('Sync result:', result);
+        return result;
     } catch (error) {
         console.error('Sync failed:', error);
+        // Fallback: save to localStorage only
+        return { success: false, error: error.message };
+    }
+}
+
+// Load data from GitHub/Netlify on page load
+async function loadFromCloud() {
+    try {
+        const response = await fetch('/.netlify/functions/syncData');
+        const data = await response.json();
+        
+        if (data.dashboardFields) {
+            window.SAVED_DASHBOARD_FIELDS = data.dashboardFields;
+        }
+        if (data.dimensionData) {
+            window.SAVED_DIMENSION_DATA = data.dimensionData;
+        }
+        if (data.images && Object.keys(data.images).length > 0) {
+            Object.entries(data.images).forEach(([key, value]) => {
+                uploadedImages.set(key, value);
+            });
+        }
+        return data;
+    } catch (error) {
+        console.error('Load from cloud failed:', error);
+        return null;
     }
 }
 
@@ -408,9 +434,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (syncBtn) {
         syncBtn.addEventListener('click', async () => {
             syncBtn.textContent = '⏳ Syncing...';
-            await syncWithServer();
+            const result = await syncWithServer();
             showSaveIndicator();
-            syncBtn.textContent = '✅ Synced';
+            syncBtn.textContent = result.success ? '✅ Synced' : '✅ Saved Locally';
             setTimeout(() => {
                 syncBtn.textContent = '🔄 Sync';
             }, 2000);
