@@ -489,19 +489,18 @@ function renderDimensionTable() {
                 const isOk = item.status === 'ok';
                 const statusColor = isOk ? 'green' : 'red';
                 const statusText = isOk ? '✅ Satisfactory' : '⚠️ Discrepancy';
-                
-                return \`
+                return `
                     <tr>
-                        <td>\${index + 1}</td>
-                        <td>\${item.area}</td>
-                        <td>\${item.brochure}</td>
-                        <td>\${item.measured}</td>
-                        <td style="color: \${statusColor};">
-                            \${statusText}
-                            \${item.comment && !isOk ? \`<br><small style="color: #666;">\${item.comment}</small>\` : ''}
+                        <td>${index + 1}</td>
+                        <td>${item.area}</td>
+                        <td>${item.brochure}</td>
+                        <td>${item.measured}</td>
+                        <td style="color: ${statusColor};">
+                            ${statusText}
+                            ${item.comment && !isOk ? `<br><small style="color: #666;">${item.comment}</small>` : ''}
                         </td>
                     </tr>
-                \`;
+                `;
             }).join('')}
         </tbody>
     `;
@@ -522,8 +521,8 @@ function updateProgress() {
         percentage = (uploadedCount / totalItems) * 100;
     }
 
-    progressFill.style.width = \`\${percentage}%\`;
-    progressText.textContent = \`\${uploadedCount} of \${totalItems} issues documented\`;
+    progressFill.style.width = `${percentage}%`;
+    progressText.textContent = `${uploadedCount} of ${totalItems} issues documented`;
 }
 
 function openModal(imageSrc) {
