@@ -1,9 +1,0 @@
-// GitHub Gist API configuration
-// TODO: Replace 'YOUR_TOKEN_HERE' with your actual GitHub Personal Access Token
-// This makes the dashboard fully automated - no user setup needed
-const GIST_ID = 'b5946a18f759e1526fd9a287edcdb91d';
-const GIST_FILE = 'dashboard-data.json';
-const GITHUB_TOKEN = 'ghp_your_actual_token_here'; // <-- REPLACE WITH REAL TOKEN
-
-// Debounce timer for auto-save
-let autoSaveTimer = null;
