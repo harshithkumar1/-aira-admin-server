@@ -36,16 +36,26 @@ A responsive home inspection report dashboard with cloud storage support.
 4. Select scope: `gist` permission
 5. Generate and copy the token
 
-### Step 4: Configure the Dashboard
+### Step 4: Configure the Dashboard ✅ DONE
 1. Open `app.js`
 2. Find the `GIST_ID` constant and replace with your Gist ID:
    ```javascript
-   const GIST_ID = 'your_gist_id_here';
+   const GIST_ID = 'b5946a18f759e1526fd9a287edcdb91d'; // Already configured!
    ```
-3. Find the `GITHUB_TOKEN` constant and replace with your token:
+3. Find the `GITHUB_TOKEN` constant on line 251
+
+⚠️ **IMPORTANT**: Your GitHub token needs to be updated:
+- If you see `ghp_...` or a long alphanumeric string, you're good!
+- If you see `⟦SECRET_REDACTED⟧` or `YOUR_TOKEN_HERE`, replace it with your real token:
    ```javascript
-   const GITHUB_TOKEN = 'your_token_here';
+   const GITHUB_TOKEN = 'ghp_your_actual_token_here';
    ```
+
+🔧 **Get your token at**: https://github.com/settings/tokens
+- Click "Generate new token" → "Fine-grained tokens"
+- Give it a name → "Dashboard"
+- Select repository: "Read and write"
+- Generate and copy the token
 
 That's it! The dashboard is now fully configured. No user setup required.
 
