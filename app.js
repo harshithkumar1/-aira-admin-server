@@ -523,6 +523,7 @@ function renderSnagSections() {
                                 </label>
                                 <div class="preview-container" style="display: none;">
                                     <img class="thumbnail" src="" alt="Proof">
+                                    <button class="delete-photo" title="Delete Photo">❌</button>
                                 </div>
                             </div>
                         </td>
@@ -611,6 +612,30 @@ function renderSnagSections() {
     container.addEventListener('click', (e) => {
         if (e.target.classList.contains('thumbnail')) {
             openModal(e.target.src);
+        }
+        // Handle delete photo button
+        if (e.target.classList.contains('delete-photo')) {
+            const uploadContainer = e.target.closest('.upload-container');
+            if (uploadContainer) {
+                const itemId = uploadContainer.dataset.id;
+                const btnText = uploadContainer.querySelector('.btn-text');
+                const previewContainer = uploadContainer.querySelector('.preview-container');
+                const thumbnail = uploadContainer.querySelector('.thumbnail');
+                const label = uploadContainer.closest('label');
+                
+                // Remove from Map
+                uploadedImages.delete(itemId);
+                
+                // Reset UI
+                thumbnail.src = '';
+                previewContainer.style.display = 'none';
+                btnText.textContent = '📷 Upload Photo';
+                if (label) label.classList.remove('uploaded');
+                
+                // Save changes
+                saveToStorage();
+                updateProgress();
+            }
         }
     });
 }
