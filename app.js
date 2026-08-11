@@ -248,7 +248,7 @@ const STORAGE_KEYS = {
 // This makes the dashboard fully automated - no user setup needed
 const GIST_ID = 'b5946a18f759e1526fd9a287edcdb91d';
 const GIST_FILE = 'dashboard-data.json';
-const GITHUB_TOKEN = '⟦SECRET_REDACTED⟧'; // <-- Replace with your actual token
+const GITHUB_TOKEN = 'ghp_your_github_token_here'; // <-- REPLACE WITH ACTUAL TOKEN
 
 // Debounce timer for auto-save
 let autoSaveTimer = null;
