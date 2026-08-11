@@ -271,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSnagSections();
     renderDimensionTable();
     updateProgress();
+    initEditableCards();
 
     const btnToSnaglist = document.getElementById('view-snaglist-btn');
     if (btnToSnaglist) {
@@ -297,6 +298,49 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function initEditableCards() {
+    // Make info cards editable on click
+    const editableCards = document.querySelectorAll('.editable-card .editable');
+    editableCards.forEach(card => {
+        card.addEventListener('blur', function() {
+            const cardContainer = this.closest('.info-card');
+            if (cardContainer) {
+                const hiddenInput = cardContainer.querySelector('.edit-input');
+                if (hiddenInput) {
+                    hiddenInput.value = this.innerHTML;
+                }
+            }
+        });
+        
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                this.blur();
+            }
+        });
+    });
+    
+    // Handle edit button clicks
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const cardContainer = this.closest('.info-card');
+            if (cardContainer) {
+                const editable = cardContainer.querySelector('.editable');
+                if (editable) {
+                    editable.focus();
+                    // Select all text for easy editing
+                    const range = document.createRange();
+                    range.selectNodeContents(editable);
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            }
+        });
+    });
+}
 
 function showView(viewId) {
     const views = document.querySelectorAll('.view');

@@ -224,6 +224,42 @@ body {
     font-size: 0.9rem;
 }
 
+/* EDITABLE CARDS */
+.editable-card {
+    position: relative;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    color: #9CA3AF;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+    margin-left: auto;
+    padding: 4px;
+}
+
+.editable-card:hover .edit-btn {
+    opacity: 1;
+}
+
+.info-card-value.editable {
+    cursor: text;
+}
+
+.info-card-value.editable:focus {
+    outline: 2px solid #E8630A;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.info-card-value.editable[contenteditable]:empty:before {
+    content: '';
+    pointer-events: none;
+}
+
 /* STATS SECTION */
 .stats-section {
     display: grid;
