@@ -325,7 +325,7 @@ function renderSnagSections() {
                             <div class="upload-container" data-id="${section.id}-${item.sno}">
                                 <label class="upload-btn">
                                     <span class="btn-text">📷 Upload Photo</span>
-                                    <input type="file" accept="image/*" capture="environment" style="display: none;">
+                                    <input type="file" accept="image/*" style="display: none;">
                                 </label>
                                 <div class="preview-container" style="display: none;">
                                     <img class="thumbnail" src="" alt="Proof">
