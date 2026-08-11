@@ -243,46 +243,26 @@ const STORAGE_KEYS = {
     IMAGES: 'aira_uploaded_images'
 };
 
-// Load data from localStorage or use defaults
-function loadFromStorage() {
-    // Load dashboard fields
-    const savedFields = localStorage.getItem(STORAGE_KEYS.DASHBOARD_FIELDS);
-    if (savedFields) {
-        window.SAVED_DASHBOARD_FIELDS = JSON.parse(savedFields);
-    }
-    
-    // Load dimension data
-    const savedDimensions = localStorage.getItem(STORAGE_KEYS.DIMENSION_DATA);
-    if (savedDimensions) {
-        window.SAVED_DIMENSION_DATA = JSON.parse(savedDimensions);
-    }
-    
-    // Load uploaded images
-    const savedImages = localStorage.getItem(STORAGE_KEYS.IMAGES);
-    if (savedImages) {
-        const imagesObj = JSON.parse(savedImages);
-        Object.entries(imagesObj).forEach(([key, value]) => {
-            uploadedImages.set(key, value);
-        });
-    }
-}
+// GitHub Gist API configuration
+// You need to:
+// 1. Create a GitHub Gist
+// 2. Get your Gist ID
+// 3. Get a GitHub Personal Access Token (free)
+// 4. Update GIST_ID below
+const GIST_ID = ''; // Your Gist ID
+const GIST_FILE = 'dashboard-data.json';
 
-// Save data to localStorage
+// In-memory storage (resets on page refresh unless synced to GitHub)
 function saveToStorage() {
-    // Save dashboard fields
     const fields = {};
     document.querySelectorAll('.editable-card').forEach(card => {
         const field = card.dataset.field;
         const valueEl = card.querySelector('.editable');
-        const hiddenInput = card.querySelector('.edit-input');
         if (valueEl && field) {
             fields[field] = valueEl.innerHTML;
-            if (hiddenInput) hiddenInput.value = valueEl.innerHTML;
         }
     });
-    localStorage.setItem(STORAGE_KEYS.DASHBOARD_FIELDS, JSON.stringify(fields));
     
-    // Save dimension data
     const dimensionData = [];
     document.querySelectorAll('.dim-input').forEach(input => {
         const field = input.dataset.field;
@@ -295,69 +275,80 @@ function saveToStorage() {
     document.querySelectorAll('.dim-status').forEach(select => {
         const field = select.dataset.field;
         if (field) {
-            const [rowIndex, dataType] = field.split('-');
+            const [rowIndex] = field.split('-');
             dimensionData[rowIndex] = dimensionData[rowIndex] || {};
-            dimensionData[rowIndex][dataType] = select.value;
+            dimensionData[rowIndex]['status'] = select.value;
         }
     });
     
-    // Convert Map to object for storage
     const imagesObj = {};
     uploadedImages.forEach((value, key) => {
         imagesObj[key] = value;
     });
     
-    localStorage.setItem(STORAGE_KEYS.DIMENSION_DATA, JSON.stringify(dimensionData));
-    localStorage.setItem(STORAGE_KEYS.IMAGES, JSON.stringify(imagesObj));
+    window.SAVED_DASHBOARD_FIELDS = fields;
+    window.SAVED_DIMENSION_DATA = dimensionData;
 }
 
-// Call sync API
-async function syncWithServer() {
-    try {
-        const data = {
-            dashboardFields: JSON.parse(localStorage.getItem(STORAGE_KEYS.DASHBOARD_FIELDS) || '{}'),
-            dimensionData: JSON.parse(localStorage.getItem(STORAGE_KEYS.DIMENSION_DATA) || '[]'),
-            images: JSON.parse(localStorage.getItem(STORAGE_KEYS.IMAGES) || '{}')
-        };
-        
-        const response = await fetch('/.netlify/functions/syncData', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        console.log('Sync result:', result);
-        return result;
-    } catch (error) {
-        console.error('Sync failed:', error);
-        // Fallback: save to localStorage only
-        return { success: false, error: error.message };
+async function saveToGist(data) {
+    const token = sessionStorage.getItem('github_token');
+    
+    if (!token || !GIST_ID) {
+        throw new Error('GitHub token or Gist ID not configured - see README.md');
     }
+    
+    const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    });
+    
+    const gist = await response.json();
+    const newContent = JSON.stringify(data, null, 2);
+    
+    await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+            files: {
+                [GIST_FILE]: { content: newContent }
+            }
+        })
+    });
 }
 
-// Load data from GitHub/Netlify on page load
-async function loadFromCloud() {
-    try {
-        const response = await fetch('/.netlify/functions/syncData');
-        const data = await response.json();
-        
-        if (data.dashboardFields) {
-            window.SAVED_DASHBOARD_FIELDS = data.dashboardFields;
-        }
-        if (data.dimensionData) {
-            window.SAVED_DIMENSION_DATA = data.dimensionData;
-        }
-        if (data.images && Object.keys(data.images).length > 0) {
-            Object.entries(data.images).forEach(([key, value]) => {
-                uploadedImages.set(key, value);
-            });
-        }
-        return data;
-    } catch (error) {
-        console.error('Load from cloud failed:', error);
+async function loadFromGist() {
+    const token = sessionStorage.getItem('github_token');
+    
+    if (!token || !GIST_ID) {
         return null;
     }
+    
+    try {
+        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+        
+        if (!response.ok) return null;
+        
+        const gist = await response.json();
+        const file = gist.files[GIST_FILE];
+        
+        if (file) {
+            return JSON.parse(file.content);
+        }
+    } catch (e) {
+        console.error('Failed to load from Gist:', e);
+    }
+    
+    return null;
 }
 
 // Image compression utility for mobile responsiveness
@@ -391,16 +382,31 @@ function compressImage(file, maxWidth, maxHeight, quality) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Load saved data from localStorage
-    loadFromStorage();
+    // Try loading from GitHub Gist first, then fall back
+    loadFromGist().then(data => {
+        if (data) {
+            // Load from Gist
+            if (data.dashboardFields) {
+                window.SAVED_DASHBOARD_FIELDS = data.dashboardFields;
+            }
+            if (data.dimensionData) {
+                window.SAVED_DIMENSION_DATA = data.dimensionData;
+            }
+            if (data.images) {
+                Object.entries(data.images).forEach(([key, value]) => {
+                    uploadedImages.set(key, value);
+                });
+            }
+        }
+        
+        totalItems = SNAG_DATA.reduce((sum, section) => sum + section.items.length, 0);
+        renderSnagSections();
+        renderDimensionTable();
+        updateProgress();
+        initEditableCards();
+        initDashboardFields();
+    });
     
-    totalItems = SNAG_DATA.reduce((sum, section) => sum + section.items.length, 0);
-    renderSnagSections();
-    renderDimensionTable();
-    updateProgress();
-    initEditableCards();
-    initDashboardFields();
-
     const btnToSnaglist = document.getElementById('view-snaglist-btn');
     if (btnToSnaglist) {
         btnToSnaglist.addEventListener('click', () => showView('snaglist-view'));
@@ -436,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
             syncBtn.textContent = '⏳ Syncing...';
             const result = await syncWithServer();
             showSaveIndicator();
-            syncBtn.textContent = result.success ? '✅ Synced' : '✅ Saved Locally';
+            syncBtn.textContent = result?.success ? '✅ Synced' : '✅ Saved';
             setTimeout(() => {
                 syncBtn.textContent = '🔄 Sync';
             }, 2000);
