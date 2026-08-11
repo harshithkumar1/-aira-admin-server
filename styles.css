@@ -767,6 +767,166 @@ body {
         max-width: 80px;
         max-height: 60px;
     }
+    
+    /* Enhanced mobile table styles - React-like responsive behavior */
+    .snag-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .snag-table thead,
+    .snag-table tbody,
+    .snag-table th,
+    .snag-table td,
+    .snag-table tr {
+        display: inline-block;
+    }
+    
+    .snag-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .snag-table tbody tr {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+    }
+    
+    .snag-table tbody td {
+        border: none;
+        padding: 10px;
+        text-align: right;
+        position: relative;
+        border-left: 6px solid #E8630A;
+    }
+    
+    .snag-table tbody td:first-child {
+        text-align: center;
+        border-left-color: #10B981;
+    }
+    
+    .snag-table tbody td:last-child {
+        text-align: left;
+    }
+    
+    .snag-table tbody td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: 600;
+        color: #6B7280;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+    }
+    
+    .upload-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .preview-container {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    /* Responsive upload cell for mobile */
+    .upload-cell {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    /* Dimension table mobile view */
+    .dimension-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .dimension-table thead,
+    .dimension-table tbody,
+    .dimension-table th,
+    .dimension-table td,
+    .dimension-table tr {
+        display: inline-block;
+    }
+    
+    .dimension-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .dimension-table tbody tr {
+        border: 1px solid #ccc;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        overflow: hidden;
+        background: white;
+    }
+    
+    .dimension-table tbody td {
+        border: none;
+        padding: 8px 10px;
+        text-align: right;
+        position: relative;
+        border-left: 4px solid #8B5CF6;
+    }
+    
+    .dimension-table tbody td:first-child {
+        text-align: center;
+        border-left-color: #8B5CF6;
+    }
+    
+    .dimension-table tbody td:last-child {
+        text-align: left;
+    }
+    
+    .dimension-table tbody td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 8px;
+        font-weight: 600;
+        color: #6B7280;
+        font-size: 0.7rem;
+    }
+    
+    .dimension-table tbody td input.dim-input {
+        width: 80px;
+        font-size: 0.75rem;
+    }
+    
+    .dimension-table tbody td select.dim-status {
+        width: 90px;
+        font-size: 0.75rem;
+    }
+    
+    /* Small modal for mobile */
+    .modal-content {
+        max-width: 95%;
+        max-height: 80vh;
+    }
+    
+    .modal-content img {
+        max-width: 100%;
+        max-height: 70vh;
+    }
+    
+    /* Progress bar mobile tweaks */
+    .progress-bar-container {
+        height: 6px;
+    }
+    
+    .progress-text {
+        font-size: 0.75rem;
+    }
 }
 
 /* SCROLLBAR */

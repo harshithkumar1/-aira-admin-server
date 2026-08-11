@@ -236,6 +236,36 @@ const DIMENSION_DATA = [
 const uploadedImages = new Map();
 let totalItems = 0;
 
+// Image compression utility for mobile responsiveness
+function compressImage(file, maxWidth, maxHeight, quality) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
+            const newWidth = Math.floor(img.width * scale);
+            const newHeight = Math.floor(img.height * scale);
+            
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                } else {
+                    reject(new Error('Canvas to Blob failed'));
+                }
+            }, 'image/jpeg', quality);
+        };
+        img.onerror = reject;
+        img.src = URL.createObjectURL(file);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     totalItems = SNAG_DATA.reduce((sum, section) => sum + section.items.length, 0);
     renderSnagSections();
@@ -319,9 +349,9 @@ function renderSnagSections() {
             <tbody>
                 ${section.items.map(item => `
                     <tr>
-                        <td>${item.sno}</td>
-                        <td>${item.description}</td>
-                        <td>
+                        <td data-label="S.No">${item.sno}</td>
+                        <td data-label="Issue Description">${item.description}</td>
+                        <td data-label="Proof">
                             <div class="upload-container" data-id="${section.id}-${item.sno}">
                                 <label class="upload-btn">
                                     <span class="btn-text">📷 Upload Photo</span>
@@ -377,23 +407,37 @@ function renderSnagSections() {
 
             if (input.files && input.files[0]) {
                 const file = input.files[0];
-                const reader = new FileReader();
-
-                reader.onload = (event) => {
-                    const dataUrl = event.target.result;
-                    uploadedImages.set(itemId, dataUrl);
-
-                    thumbnail.src = dataUrl;
-                    previewContainer.style.display = 'block';
-                    btnText.textContent = '✅ Uploaded';
-                    
-                    const label = input.closest('label');
-                    if(label) label.classList.add('uploaded');
-
-                    updateProgress();
-                };
-
-                reader.readAsDataURL(file);
+                
+                // Compress image for mobile responsiveness
+                compressImage(file, 200, 150, 0.7)
+                    .then(compressedDataUrl => {
+                        uploadedImages.set(itemId, compressedDataUrl);
+                        thumbnail.src = compressedDataUrl;
+                        previewContainer.style.display = 'block';
+                        btnText.textContent = '✅ Uploaded';
+                        
+                        const label = input.closest('label');
+                        if(label) label.classList.add('uploaded');
+                        
+                        updateProgress();
+                    })
+                    .catch(error => {
+                        console.error('Error compressing image:', error);
+                        // Fallback to original if compression fails
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            const dataUrl = event.target.result;
+                            uploadedImages.set(itemId, dataUrl);
+                            thumbnail.src = dataUrl;
+                            previewContainer.style.display = 'block';
+                            btnText.textContent = '✅ Uploaded';
+                            
+                            const label = input.closest('label');
+                            if(label) label.classList.add('uploaded');
+                            updateProgress();
+                        };
+                        reader.readAsDataURL(file);
+                    });
             }
         }
     });
@@ -462,11 +506,11 @@ function renderDimensionTable() {
             ${DIMENSION_DATA.map((item, index) => {
                 return `
                     <tr>
-                        <td>${index + 1}</td>
-                        <td>${item.area}</td>
-                        <td><input type="text" class="dim-input" data-field="${index}-brochure" value="${item.brochure}"></td>
-                        <td><input type="text" class="dim-input" data-field="${index}-measured" value="${item.measured}"></td>
-                        <td>
+                        <td data-label="S.No">${index + 1}</td>
+                        <td data-label="Area">${item.area}</td>
+                        <td data-label="Brochure Dimension"><input type="text" class="dim-input" data-field="${index}-brochure" value="${item.brochure}"></td>
+                        <td data-label="Measured In-Site"><input type="text" class="dim-input" data-field="${index}-measured" value="${item.measured}"></td>
+                        <td data-label="Status">
                             <select class="dim-status" data-field="${index}-status">
                                 <option value="ok" ${item.status === 'ok' ? 'selected' : ''}>Satisfactory</option>
                                 <option value="warn" ${item.status === 'warn' ? 'selected' : ''}>Discrepancy</option>
