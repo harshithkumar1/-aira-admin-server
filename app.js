@@ -236,6 +236,104 @@ const DIMENSION_DATA = [
 const uploadedImages = new Map();
 let totalItems = 0;
 
+// LocalStorage keys
+const STORAGE_KEYS = {
+    DASHBOARD_FIELDS: 'aira_dashboard_fields',
+    DIMENSION_DATA: 'aira_dimension_data',
+    IMAGES: 'aira_uploaded_images'
+};
+
+// Load data from localStorage or use defaults
+function loadFromStorage() {
+    // Load dashboard fields
+    const savedFields = localStorage.getItem(STORAGE_KEYS.DASHBOARD_FIELDS);
+    if (savedFields) {
+        window.SAVED_DASHBOARD_FIELDS = JSON.parse(savedFields);
+    }
+    
+    // Load dimension data
+    const savedDimensions = localStorage.getItem(STORAGE_KEYS.DIMENSION_DATA);
+    if (savedDimensions) {
+        window.SAVED_DIMENSION_DATA = JSON.parse(savedDimensions);
+    }
+    
+    // Load uploaded images
+    const savedImages = localStorage.getItem(STORAGE_KEYS.IMAGES);
+    if (savedImages) {
+        const imagesObj = JSON.parse(savedImages);
+        Object.entries(imagesObj).forEach(([key, value]) => {
+            uploadedImages.set(key, value);
+        });
+    }
+}
+
+// Save data to localStorage
+function saveToStorage() {
+    // Save dashboard fields
+    const fields = {};
+    document.querySelectorAll('.editable-card').forEach(card => {
+        const field = card.dataset.field;
+        const valueEl = card.querySelector('.editable');
+        const hiddenInput = card.querySelector('.edit-input');
+        if (valueEl && field) {
+            fields[field] = valueEl.innerHTML;
+            if (hiddenInput) hiddenInput.value = valueEl.innerHTML;
+        }
+    });
+    localStorage.setItem(STORAGE_KEYS.DASHBOARD_FIELDS, JSON.stringify(fields));
+    
+    // Save dimension data
+    const dimensionData = [];
+    document.querySelectorAll('.dim-input').forEach(input => {
+        const field = input.dataset.field;
+        if (field) {
+            const [rowIndex, dataType] = field.split('-');
+            dimensionData[rowIndex] = dimensionData[rowIndex] || {};
+            dimensionData[rowIndex][dataType] = input.value;
+        }
+    });
+    document.querySelectorAll('.dim-status').forEach(select => {
+        const field = select.dataset.field;
+        if (field) {
+            const [rowIndex, dataType] = field.split('-');
+            dimensionData[rowIndex] = dimensionData[rowIndex] || {};
+            dimensionData[rowIndex][dataType] = select.value;
+        }
+    });
+    
+    // Convert Map to object for storage
+    const imagesObj = {};
+    uploadedImages.forEach((value, key) => {
+        imagesObj[key] = value;
+    });
+    
+    localStorage.setItem(STORAGE_KEYS.DIMENSION_DATA, JSON.stringify(dimensionData));
+    localStorage.setItem(STORAGE_KEYS.IMAGES, JSON.stringify(imagesObj));
+}
+
+// Call sync API (placeholder for Netlify Functions)
+async function syncWithServer() {
+    try {
+        const data = {
+            dashboardFields: JSON.parse(localStorage.getItem(STORAGE_KEYS.DASHBOARD_FIELDS) || '{}'),
+            dimensionData: JSON.parse(localStorage.getItem(STORAGE_KEYS.DIMENSION_DATA) || '[]'),
+            images: JSON.parse(localStorage.getItem(STORAGE_KEYS.IMAGES) || '{}')
+        };
+        
+        // TODO: Implement actual API call to Netlify Functions
+        // For now, this is where you'd make a POST request to your sync endpoint
+        console.log('Syncing with server:', data);
+        
+        // Example: fetch('/.netlify/functions/syncData', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(data)
+        // });
+    } catch (error) {
+        console.error('Sync failed:', error);
+    }
+}
+
 // Image compression utility for mobile responsiveness
 function compressImage(file, maxWidth, maxHeight, quality) {
     return new Promise((resolve, reject) => {
@@ -267,11 +365,15 @@ function compressImage(file, maxWidth, maxHeight, quality) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Load saved data from localStorage
+    loadFromStorage();
+    
     totalItems = SNAG_DATA.reduce((sum, section) => sum + section.items.length, 0);
     renderSnagSections();
     renderDimensionTable();
     updateProgress();
     initEditableCards();
+    initDashboardFields();
 
     const btnToSnaglist = document.getElementById('view-snaglist-btn');
     if (btnToSnaglist) {
@@ -297,6 +399,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    // Add save/auto-sync button
+    addSaveControls();
+    
+    // Sync button handler
+    const syncBtn = document.getElementById('sync-btn');
+    if (syncBtn) {
+        syncBtn.addEventListener('click', async () => {
+            syncBtn.textContent = '⏳ Syncing...';
+            await syncWithServer();
+            showSaveIndicator();
+            syncBtn.textContent = '✅ Synced';
+            setTimeout(() => {
+                syncBtn.textContent = '🔄 Sync';
+            }, 2000);
+        });
+    }
 });
 
 function initEditableCards() {
@@ -310,6 +429,7 @@ function initEditableCards() {
                 if (hiddenInput) {
                     hiddenInput.value = this.innerHTML;
                 }
+                saveToStorage();
             }
         });
         
@@ -463,6 +583,7 @@ function renderSnagSections() {
                         const label = input.closest('label');
                         if(label) label.classList.add('uploaded');
                         
+                        saveToStorage();
                         updateProgress();
                     })
                     .catch(error => {
@@ -478,6 +599,7 @@ function renderSnagSections() {
                             
                             const label = input.closest('label');
                             if(label) label.classList.add('uploaded');
+                            saveToStorage();
                             updateProgress();
                         };
                         reader.readAsDataURL(file);
@@ -584,6 +706,152 @@ function updateProgress() {
 
     progressFill.style.width = `${percentage}%`;
     progressText.textContent = `${uploadedCount} of ${totalItems} issues documented`;
+}
+
+// Initialize dashboard fields with saved values
+function initDashboardFields() {
+    if (window.SAVED_DASHBOARD_FIELDS) {
+        Object.entries(window.SAVED_DASHBOARD_FIELDS).forEach(([field, value]) => {
+            const card = document.querySelector(`.editable-card[data-field="${field}"]`);
+            if (card) {
+                const editable = card.querySelector('.editable');
+                if (editable) {
+                    editable.innerHTML = value;
+                }
+            }
+        });
+    }
+}
+
+// Enhanced dimension table render with saved values
+const renderDimensionTableOriginal = renderDimensionTable;
+renderDimensionTable = function() {
+    let dimensionSectionBody = document.querySelector('#dimension-section .section-body');
+    
+    if (!dimensionSectionBody) {
+        const container = document.getElementById('snag-sections-container');
+        if (!container) return;
+
+        const sectionEl = document.createElement('div');
+        sectionEl.id = 'dimension-section';
+        sectionEl.className = 'snag-section';
+
+        const header = document.createElement('div');
+        header.className = 'section-header';
+        header.innerHTML = `
+            <div class="section-title">
+                <span class="section-icon">📏</span>
+                <h3>Room Dimensions</h3>
+            </div>
+            <span class="toggle-icon">▼</span>
+        `;
+
+        const body = document.createElement('div');
+        body.className = 'section-body';
+
+        sectionEl.appendChild(header);
+        sectionEl.appendChild(body);
+        container.appendChild(sectionEl);
+
+        header.addEventListener('click', () => {
+            const isActive = header.classList.contains('active');
+            header.classList.toggle('active', !isActive);
+            body.classList.toggle('open', !isActive);
+            body.style.display = isActive ? 'none' : 'block';
+        });
+
+        body.style.display = 'none';
+        dimensionSectionBody = body;
+    } else {
+        dimensionSectionBody.innerHTML = '';
+    }
+
+    // Use saved dimension data if available
+    const dimData = window.SAVED_DIMENSION_DATA || DIMENSION_DATA;
+    const data = Array.isArray(dimData) ? dimData : DIMENSION_DATA;
+
+    const table = document.createElement('table');
+    table.className = 'snag-table dimension-table';
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Area</th>
+                <th>Brochure Dimension</th>
+                <th>Measured In-Site</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${data.map((item, index) => {
+                return `
+                    <tr>
+                        <td data-label="S.No">${index + 1}</td>
+                        <td data-label="Area">${item.area}</td>
+                        <td data-label="Brochure Dimension"><input type="text" class="dim-input" data-field="${index}-brochure" value="${item.brochure || ''}"></td>
+                        <td data-label="Measured In-Site"><input type="text" class="dim-input" data-field="${index}-measured" value="${item.measured || ''}"></td>
+                        <td data-label="Status">
+                            <select class="dim-status" data-field="${index}-status">
+                                <option value="ok" ${item.status === 'ok' ? 'selected' : ''}>Satisfactory</option>
+                                <option value="warn" ${item.status === 'warn' ? 'selected' : ''}>Discrepancy</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    `;
+
+    dimensionSectionBody.appendChild(table);
+    
+    // Add event listeners for dimension inputs
+    addDimensionListeners(table);
+}
+
+// Add listeners for dimension table inputs
+function addDimensionListeners(table) {
+    table.querySelectorAll('.dim-input, .dim-status').forEach(element => {
+        element.addEventListener('change', () => {
+            saveToStorage();
+        });
+        element.addEventListener('input', () => {
+            saveToStorage();
+        });
+    });
+}
+
+// Add save controls to the UI
+function addSaveControls() {
+    // Add auto-save on page unload
+    window.addEventListener('beforeunload', () => {
+        saveToStorage();
+    });
+    
+    // Add visibility for debug/save status
+    const progressSection = document.querySelector('.progress-section');
+    if (progressSection) {
+        const saveIndicator = document.createElement('div');
+        saveIndicator.id = 'save-indicator';
+        saveIndicator.style.textAlign = 'center';
+        saveIndicator.style.padding = '10px';
+        saveIndicator.style.color = '#10B981';
+        saveIndicator.style.fontSize = '0.85rem';
+        saveIndicator.style.opacity = '0';
+        saveIndicator.style.transition = 'opacity 0.3s';
+        saveIndicator.textContent = '✓ All changes saved';
+        progressSection.appendChild(saveIndicator);
+    }
+}
+
+// Show save indicator
+function showSaveIndicator() {
+    const indicator = document.getElementById('save-indicator');
+    if (indicator) {
+        indicator.style.opacity = '1';
+        setTimeout(() => {
+            indicator.style.opacity = '0';
+        }, 2000);
+    }
 }
 
 function openModal(imageSrc) {
