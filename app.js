@@ -252,8 +252,11 @@ const STORAGE_KEYS = {
 const GIST_ID = ''; // Your Gist ID
 const GIST_FILE = 'dashboard-data.json';
 
+// Debounce timer for auto-save
+let autoSaveTimer = null;
+
 // In-memory storage (resets on page refresh unless synced to GitHub)
-function saveToStorage() {
+function saveToStorage(autoSave = false) {
     const fields = {};
     document.querySelectorAll('.editable-card').forEach(card => {
         const field = card.dataset.field;
@@ -288,6 +291,21 @@ function saveToStorage() {
     
     window.SAVED_DASHBOARD_FIELDS = fields;
     window.SAVED_DIMENSION_DATA = dimensionData;
+    
+    // Auto-save to GitHub Gist (debounced)
+    if (autoSave && sessionStorage.getItem('github_token')) {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+            const dataToSave = {
+                dashboardFields: fields,
+                dimensionData: dimensionData,
+                images: imagesObj
+            };
+            saveToGist(dataToSave).catch(err => {
+                console.log('Auto-save to Gist failed:', err.message);
+            });
+        }, 500); // 500ms debounce
+    }
 }
 
 async function saveToGist(data) {
@@ -461,7 +479,7 @@ function initEditableCards() {
                 if (hiddenInput) {
                     hiddenInput.value = this.innerHTML;
                 }
-                saveToStorage();
+                saveToStorage(true);
             }
         });
         
@@ -616,7 +634,7 @@ function renderSnagSections() {
                         const label = input.closest('label');
                         if(label) label.classList.add('uploaded');
                         
-                        saveToStorage();
+                        saveToStorage(true);
                         updateProgress();
                     })
                     .catch(error => {
@@ -632,7 +650,7 @@ function renderSnagSections() {
                             
                             const label = input.closest('label');
                             if(label) label.classList.add('uploaded');
-                            saveToStorage();
+                            saveToStorage(true);
                             updateProgress();
                         };
                         reader.readAsDataURL(file);
@@ -664,8 +682,8 @@ function renderSnagSections() {
                 btnText.textContent = '📷 Upload Photo';
                 if (label) label.classList.remove('uploaded');
                 
-                // Save changes
-                saveToStorage();
+                // Save changes with auto-save
+                saveToStorage(true);
                 updateProgress();
             }
         }
@@ -894,10 +912,10 @@ renderDimensionTable = function() {
 function addDimensionListeners(table) {
     table.querySelectorAll('.dim-input, .dim-status').forEach(element => {
         element.addEventListener('change', () => {
-            saveToStorage();
+            saveToStorage(true);
         });
         element.addEventListener('input', () => {
-            saveToStorage();
+            saveToStorage(true);
         });
     });
 }
