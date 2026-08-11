@@ -638,6 +638,31 @@ function renderSnagSections() {
             }
         }
     });
+    
+    // Restore saved images after rendering
+    restoreSavedImages();
+}
+
+// Restore saved images from localStorage to the UI
+function restoreSavedImages() {
+    if (uploadedImages.size === 0) return;
+    
+    uploadedImages.forEach((imageData, itemId) => {
+        const uploadContainer = document.querySelector(`.upload-container[data-id="${itemId}"]`);
+        if (uploadContainer) {
+            const thumbnail = uploadContainer.querySelector('.thumbnail');
+            const previewContainer = uploadContainer.querySelector('.preview-container');
+            const btnText = uploadContainer.querySelector('.btn-text');
+            const label = uploadContainer.closest('label');
+            
+            if (thumbnail && previewContainer) {
+                thumbnail.src = imageData;
+                previewContainer.style.display = 'block';
+                btnText.textContent = '✅ Uploaded';
+                if (label) label.classList.add('uploaded');
+            }
+        }
+    });
 }
 
 function renderDimensionTable() {
