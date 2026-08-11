@@ -1,32 +1,151 @@
+// SNAG DATA - Extracted EXACTLY from PDF pages 6-52
+// Order follows the PDF page sequence: 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ...
+
 const SNAG_DATA = [
   {
-    id: 'drawing-room',
-    title: 'Drawing Room / Living Area',
+    id: 'bedroom-1',
+    title: 'BEDROOM -1',
     icon: '🏠',
     items: [
-      { sno: 1, description: 'Tile hollowness identified in vitrified flooring near the entrance zone' },
-      { sno: 2, description: 'Tile undulations observed along the south wall-floor junction' },
-      { sno: 3, description: 'Grouting gaps identified between floor tiles near balcony door' },
-      { sno: 4, description: 'Wall undulations observed on east wall surface' },
-      { sno: 5, description: 'Edge damage / chipping observed on wall corners near passage entry' },
-      { sno: 6, description: 'Second coat of putty & paint pending on ceiling surface' },
-      { sno: 7, description: 'Paint shade variation observed between adjacent wall surfaces' },
-      { sno: 8, description: 'Gaps identified between flooring skirting and wall surface' },
-      { sno: 9, description: 'Skirting alignment issue observed near window wall' },
-      { sno: 10, description: 'Switchboard face plates missing — all switch points' }
+      { sno: 1, description: 'Hollowness Observed on floor tile' },
+      { sno: 2, description: 'Wall 2nd coat paint pending from builder side' },
+      { sno: 3, description: 'Wall Undulation Observed' },
+      { sno: 4, description: 'Ceiling shade variation observed' },
+      { sno: 5, description: 'Door frame polish not done' },
+      { sno: 6, description: 'Door shutter polish not done properly' },
+      { sno: 7, description: 'Shutter and frame not in line' },
+      { sno: 8, description: 'Hinges not screwed properly' },
+      { sno: 9, description: 'Entire door fastner cap missing' },
+      { sno: 10, description: 'Stains observed on glass Scratches' },
+      { sno: 11, description: 'Dead mortar on windows' },
+      { sno: 12, description: 'Faster caps missing entire window And screws were protuding sharply' },
+      { sno: 13, description: 'Entire flat switch face plate missing' }
     ]
   },
   {
-    id: 'family-area',
-    title: 'Family Area / Passage',
-    icon: '🚪',
+    id: 'bathroom-1',
+    title: 'Bathroom -1',
+    icon: '🚿',
     items: [
-      { sno: 1, description: 'Tile hollowness identified near bedroom entry zones' },
-      { sno: 2, description: 'Tile offset observed at tile joints along the passage' },
-      { sno: 3, description: 'Wall undulations observed on passage wall surface' },
-      { sno: 4, description: 'Edge chipping identified at wall corners — multiple locations' },
-      { sno: 5, description: 'Second coat of paint pending on walls and ceiling' },
-      { sno: 6, description: 'Switchboard face plates missing — all switch points' }
+      { sno: 1, description: 'Hollowness observed on floor tiles' },
+      { sno: 2, description: 'Offset on floor tiles' },
+      { sno: 3, description: 'Wall tiles Hallowness observed' },
+      { sno: 4, description: 'Offset observedon wall tiles' },
+      { sno: 5, description: 'Wall tile chippoff Observed' },
+      { sno: 6, description: 'Wall tile cutouts not selead properly' },
+      { sno: 7, description: 'Frame damage observed' },
+      { sno: 8, description: 'Frame polishing not done properly' },
+      { sno: 9, description: 'Frame gaps and door shutter and frame not in line' },
+      { sno: 10, description: 'Door fastner caps missing' },
+      { sno: 11, description: 'Window stains and fittings not fixed properly' },
+      { sno: 12, description: 'Track not cleaned properly' },
+      { sno: 13, description: 'Gaps observed between sanitary fittings' }
+    ]
+  },
+  {
+    id: 'bedroom-2',
+    title: 'Bedroom-2',
+    icon: '🛏️',
+    items: [
+      { sno: 1, description: 'Skirting groove not in line' },
+      { sno: 2, description: 'Scratches and hallowness observed' },
+      { sno: 3, description: 'Shade variation observed on wall surface' },
+      { sno: 4, description: 'Frame polish not done properly' },
+      { sno: 5, description: 'Frame crack' },
+      { sno: 6, description: 'Door frame and shutter not in line' },
+      { sno: 7, description: 'Door hardware not fixed properly' },
+      { sno: 8, description: 'Fastner caps missing' },
+      { sno: 9, description: 'Shutter polish work not done properly' },
+      { sno: 10, description: 'Edges finishing not done properly' },
+      { sno: 11, description: 'Wall undulation observed' },
+      { sno: 12, description: 'Window stains observed and scratches were found' },
+      { sno: 13, description: 'Stains observed on window' },
+      { sno: 14, description: 'Fastner caps missing' },
+      { sno: 15, description: 'Sealant gaps observed' },
+      { sno: 16, description: 'Entire flat switch plates missing' }
+    ]
+  },
+  {
+    id: 'bathroom-2',
+    title: 'Bathroom -2',
+    icon: '🚿',
+    items: [
+      { sno: 1, description: 'Chippoff observedn on floor tiles' },
+      { sno: 2, description: 'Wall tiles Hallowness observed' },
+      { sno: 3, description: 'Offsets observed' },
+      { sno: 4, description: 'Tile damage observed' },
+      { sno: 5, description: 'Wall tiles cutouts.' },
+      { sno: 6, description: 'Frame polish' },
+      { sno: 7, description: 'Rubber gasket damage' },
+      { sno: 8, description: 'Fastner caps missing' },
+      { sno: 9, description: 'Door shutter and frame not in line' },
+      { sno: 10, description: 'Stains and fittings not fixed properly' },
+      { sno: 11, description: 'Track not cleaned properly' },
+      { sno: 12, description: 'Gaps observed between wall and sanitory fitting' }
+    ]
+  },
+  {
+    id: 'bedroom-3',
+    title: 'Bedroom-3',
+    icon: '🛏️',
+    items: [
+      { sno: 1, description: 'Scratches on floor tiles' },
+      { sno: 2, description: 'Hallowness and offset observed' },
+      { sno: 3, description: 'Wall undulation' },
+      { sno: 4, description: 'Shade variation observed' },
+      { sno: 5, description: 'Frame polish' },
+      { sno: 6, description: 'Shutter and frame not in line' }
+    ]
+  },
+  {
+    id: 'bedroom-toilet-3',
+    title: 'Bedroom--3',
+    icon: '🚿',
+    items: [
+      { sno: 7, description: 'Fittings not fixed properly' },
+      { sno: 8, description: 'Fastner caps missing' },
+      { sno: 9, description: 'Fire exist selead in wall' },
+      { sno: 10, description: 'Window not opening properly Mesh damage observed Stains and scratches' },
+      { sno: 11, description: 'Fastner capsmissing' }
+    ]
+  },
+  {
+    id: 'bathroom-3',
+    title: 'Bathroom -3',
+    icon: '🚿',
+    items: [
+      { sno: 1, description: 'Tile damage observed on flooor tile' },
+      { sno: 2, description: '2nd coat paint pending' },
+      { sno: 3, description: 'Hallow tile' },
+      { sno: 4, description: 'Hallowness observed' },
+      { sno: 5, description: 'Toliet ledge wall champers off' },
+      { sno: 6, description: 'Cutouts not selead properly' },
+      { sno: 7, description: 'Frame polish' },
+      { sno: 8, description: 'Shutter polish' },
+      { sno: 9, description: 'Fatsner caps missing' },
+      { sno: 10, description: 'Shutter and frame not in line' },
+      { sno: 11, description: 'Dead motar and dust observed in UPVC frame' },
+      { sno: 12, description: 'Gaps observed between wall and sanitory fitting' }
+    ]
+  },
+  {
+    id: 'bedroom-4',
+    title: 'Bedroom-4',
+    icon: '🛏️',
+    items: [
+      { sno: 1, description: 'Tile damage observed on flooor tile' },
+      { sno: 2, description: '2nd coat paint pending' },
+      { sno: 3, description: 'Hallow tile' },
+      { sno: 5, description: 'Wall undulation observed' },
+      { sno: 6, description: 'Frame polish' },
+      { sno: 7, description: 'Shutter polish' },
+      { sno: 7, description: 'Stains observed on windows' },
+      { sno: 8, description: 'Frame chippoff' },
+      { sno: 9, description: 'Gaps found between door frame and shutter' },
+      { sno: 10, description: 'Door handles and hardware were not fixed properly' },
+      { sno: 11, description: 'Mesh damage Stains and scrathes' },
+      { sno: 12, description: 'Fastner Caps missing' },
+      { sno: 13, description: 'Dead mortor and stains observed on windows' }
     ]
   },
   {
@@ -34,132 +153,49 @@ const SNAG_DATA = [
     title: 'Kitchen',
     icon: '🍳',
     items: [
-      { sno: 1, description: 'Tile hollowness identified in kitchen flooring area' },
-      { sno: 2, description: 'Tile chip-off / damaged tile observed near counter zone' },
-      { sno: 3, description: 'Wall tile undulations observed above countertop area' },
-      { sno: 4, description: 'Wall tile grouting gaps observed — multiple locations' },
-      { sno: 5, description: 'Second coat of paint pending on ceiling surface' },
-      { sno: 6, description: 'Gaps observed between floor skirting and wall surface' },
-      { sno: 7, description: 'Plumbing — pipe sleeve penetrations unpacked under sink area' },
-      { sno: 8, description: 'Switchboard face plates missing — all switch points' }
+      { sno: 1, description: 'Hallowness observed on floor tiles' },
+      { sno: 2, description: 'Scratches Observed' },
+      { sno: 3, description: 'Chippoff Observed' },
+      { sno: 4, description: 'Wall damage observed' },
+      { sno: 5, description: 'Wall undulation observed' },
+      { sno: 6, description: 'Window stains and scathes and cleaning pending' }
     ]
   },
   {
-    id: 'utility',
+    id: 'utility-area',
     title: 'Utility Area',
     icon: '🧹',
     items: [
-      { sno: 1, description: 'Tile hollowness identified in utility flooring' },
-      { sno: 2, description: 'Wall undulations observed on wall surfaces' },
-      { sno: 3, description: 'Second coat of paint pending on walls and ceiling' },
-      { sno: 4, description: 'Unpacked pipe sleeve penetrations observed' },
-      { sno: 5, description: 'Gaps observed around sanitary drain fittings' },
-      { sno: 6, description: 'Switchboard face plates missing — all switch points' }
+      { sno: 1, description: 'Offsets observed on flooring' },
+      { sno: 2, description: 'Hallowness' },
+      { sno: 3, description: 'Wall tiles cutouts not finished properly' },
+      { sno: 4, description: 'Wall tiles grouting pending' },
+      { sno: 5, description: 'Chippoffs and gaps observed' },
+      { sno: 6, description: 'Undulation observed' },
+      { sno: 7, description: 'Shade variation' },
+      { sno: 8, description: 'Finishing pending looking odd Shaft' },
+      { sno: 9, description: 'Frame & Shutter polish' },
+      { sno: 10, description: 'Scarthes on shutter' },
+      { sno: 11, description: 'Damage on frame' },
+      { sno: 12, description: 'Hinges not screwed properly' }
     ]
   },
   {
-    id: 'master-bedroom',
-    title: 'Master Bedroom',
-    icon: '🛏️',
+    id: 'living-area',
+    title: 'Living Area',
+    icon: '🏠',
     items: [
-      { sno: 1, description: 'Tile hollowness identified in bedroom flooring' },
-      { sno: 2, description: 'Tile undulations observed along north wall edge' },
-      { sno: 3, description: 'Tile offset at joints near wardrobe wall area' },
-      { sno: 4, description: 'Wall undulations observed on east wall surface' },
-      { sno: 5, description: 'Edge damage / chipping observed on wall corners' },
-      { sno: 6, description: 'Second coat of putty & paint pending on ceiling and walls' },
-      { sno: 7, description: 'Paint shade variation observed between wall surfaces' },
-      { sno: 8, description: 'Gaps identified between flooring skirting and wall surface' },
-      { sno: 9, description: 'Door frame damage / dent marks observed on frame edge' },
-      { sno: 10, description: 'Door shutter not properly aligned with frame — visible gap' },
-      { sno: 11, description: 'Missing fastener caps on door hinges' },
-      { sno: 12, description: 'Door hinge screws loosely fixed — tightening required' },
-      { sno: 13, description: 'Switchboard face plates missing — all switch points' }
-    ]
-  },
-  {
-    id: 'master-toilet',
-    title: 'Master Bedroom Toilet',
-    icon: '🚿',
-    items: [
-      { sno: 1, description: 'Tile hollowness identified on wall tiles — multiple locations' },
-      { sno: 2, description: 'Tile hollowness identified on floor tiles' },
-      { sno: 3, description: 'Grouting gaps observed between wall tiles' },
-      { sno: 4, description: 'Gaps observed around wash basin fitting and wall junction' },
-      { sno: 5, description: 'Gaps observed around water closet base and floor junction' },
-      { sno: 6, description: 'Unpacked pipe sleeve penetrations — behind basin & WC area' },
-      { sno: 7, description: 'Sealant missing around shower area floor junction' },
-      { sno: 8, description: 'Switchboard face plates missing' }
-    ]
-  },
-  {
-    id: 'bedroom-1',
-    title: 'Bedroom 1',
-    icon: '🛌',
-    items: [
-      { sno: 1, description: 'Tile hollowness identified in bedroom flooring' },
-      { sno: 2, description: 'Tile undulations observed near window wall' },
-      { sno: 3, description: 'Wall undulations observed on south wall surface' },
-      { sno: 4, description: 'Edge damage / chipping identified at wall corners' },
-      { sno: 5, description: 'Second coat of paint pending on ceiling surface' },
-      { sno: 6, description: 'Gaps identified between flooring skirting and wall' },
-      { sno: 7, description: 'Door frame damage / scratch marks observed' },
-      { sno: 8, description: 'Door shutter alignment issue — uneven gap with frame' },
-      { sno: 9, description: 'Missing fastener caps on door hardware fittings' },
-      { sno: 10, description: 'Switchboard face plates missing — all switch points' }
-    ]
-  },
-  {
-    id: 'bedroom-1-toilet',
-    title: 'Bedroom 1 Toilet',
-    icon: '🚿',
-    items: [
-      { sno: 1, description: 'Tile hollowness identified on floor tiles' },
-      { sno: 2, description: 'Wall tile grouting gaps observed — multiple locations' },
-      { sno: 3, description: 'Gaps observed around wash basin fitting and wall junction' },
-      { sno: 4, description: 'Unpacked pipe sleeve penetrations — behind basin area' },
-      { sno: 5, description: 'Switchboard face plates missing' }
-    ]
-  },
-  {
-    id: 'bedroom-2',
-    title: 'Bedroom 2',
-    icon: '🛌',
-    items: [
-      { sno: 1, description: 'Tile hollowness identified in bedroom flooring' },
-      { sno: 2, description: 'Tile chip-off / damaged tile observed near door entry' },
-      { sno: 3, description: 'Wall undulations observed on west wall surface' },
-      { sno: 4, description: 'Second coat of paint pending on walls and ceiling' },
-      { sno: 5, description: 'Door frame damage / dent marks observed' },
-      { sno: 6, description: 'Missing fastener caps on door hardware fittings' },
-      { sno: 7, description: 'Switchboard face plates missing — all switch points' }
-    ]
-  },
-  {
-    id: 'bedroom-2-toilet',
-    title: 'Bedroom 2 Toilet',
-    icon: '🚿',
-    items: [
-      { sno: 1, description: 'Tile hollowness identified on floor tiles' },
-      { sno: 2, description: 'Wall tile offset observed at tile joints' },
-      { sno: 3, description: 'Gaps observed around wash basin sanitary fitting' },
-      { sno: 4, description: 'Gaps observed around water closet base and floor' },
-      { sno: 5, description: 'Unpacked pipe sleeve penetrations — behind WC area' },
-      { sno: 6, description: 'Switchboard face plates missing' }
-    ]
-  },
-  {
-    id: 'bedroom-3',
-    title: 'Bedroom 3 / Home Office',
-    icon: '💼',
-    items: [
-      { sno: 1, description: 'Tile hollowness identified in room flooring' },
-      { sno: 2, description: 'Wall undulations observed on wall surfaces' },
-      { sno: 3, description: 'Edge damage identified at wall corners' },
-      { sno: 4, description: 'Second coat of paint pending on walls and ceiling' },
-      { sno: 5, description: 'Door frame damage / poor polish finish observed' },
-      { sno: 6, description: 'Switchboard face plates missing — all switch points' },
-      { sno: 7, description: 'External CP fittings pending — adjacent Bedroom 4 area' }
+      { sno: 1, description: 'Hallowness observed on floor tiles' },
+      { sno: 2, description: 'Pooja walls is not in line' },
+      { sno: 3, description: 'Tile damage' },
+      { sno: 4, description: 'Wall edges finishing not done properly' },
+      { sno: 5, description: 'Main door Frame damage' },
+      { sno: 6, description: 'Frame gaps and polish not finished properly' },
+      { sno: 7, description: 'Fastner capsmissing' },
+      { sno: 8, description: 'Eye piece missing in shutter' },
+      { sno: 9, description: 'Window Mesh Damaged' },
+      { sno: 10, description: 'DB gaps observed' },
+      { sno: 11, description: 'DB cover drawing misiing' }
     ]
   },
   {
@@ -167,86 +203,21 @@ const SNAG_DATA = [
     title: 'Balcony',
     icon: '🌿',
     items: [
-      { sno: 1, description: 'Cracked granite upstand slab on parapet wall — replacement required' },
-      { sno: 2, description: 'Damaged window mesh on balcony enclosure panel' },
-      { sno: 3, description: 'Glass scratches observed on balcony window panels' },
-      { sno: 4, description: 'Damping / moisture shades visible on corner wall surfaces' },
-      { sno: 5, description: 'Sealant gaps observed at window frame and wall junction' },
-      { sno: 6, description: 'Floor tile grouting gaps observed — multiple locations' }
-    ]
-  },
-  {
-    id: 'windows-upvc',
-    title: 'Windows & UPVC Works',
-    icon: '🪟',
-    items: [
-      { sno: 1, description: 'Mortar residue on glass panels — Drawing Room window' },
-      { sno: 2, description: 'Mortar residue on glass panels — Master Bedroom window' },
-      { sno: 3, description: 'Construction stains on UPVC frames — multiple window locations' },
-      { sno: 4, description: 'Glass scratches observed — Bedroom 1 window panel' },
-      { sno: 5, description: 'Glass scratches observed — Bedroom 3 window panel' },
-      { sno: 6, description: 'Window tracks uncleaned with dust and debris — all windows' },
-      { sno: 7, description: 'Sealant gaps between UPVC frame and wall — multiple locations' },
-      { sno: 8, description: 'Missing fastener caps on window hardware fittings' },
-      { sno: 9, description: 'Sharp / protruding fastener screws — Bedroom 2 window' },
-      { sno: 10, description: 'Damaged window mesh panel — Bedroom 3 window' },
-      { sno: 11, description: 'Damaged rubber gaskets on sliding window panels' }
-    ]
-  },
-  {
-    id: 'doors',
-    title: 'Main Door & Internal Doors',
-    icon: '🚪',
-    items: [
-      { sno: 1, description: 'Main door — eye piece / door viewer (peephole) missing' },
-      { sno: 2, description: 'Main door — frame edge damage near hinge side' },
-      { sno: 3, description: 'Main door — lock alignment issue causing stiff operation' },
-      { sno: 4, description: 'Internal door (Master BR) — frame damage with visible dent marks' },
-      { sno: 5, description: 'Internal door (Master BR) — poor polish / uneven paint finish' },
-      { sno: 6, description: 'Internal door (Bedroom 1) — shutter-frame alignment gap visible' },
-      { sno: 7, description: 'Internal door (Bedroom 2) — frame scratch / surface damage' },
-      { sno: 8, description: 'Internal door (Home Office) — poor polish finish on frame surface' },
-      { sno: 9, description: 'Missing fastener caps on all internal door hinges & hardware fittings' }
-    ]
-  },
-  {
-    id: 'electrical',
-    title: 'Electrical Works',
-    icon: '⚡',
-    items: [
-      { sno: 1, description: 'Switchboard face plates missing — Drawing Room switch points' },
-      { sno: 2, description: 'Switchboard face plates missing — Kitchen switch points' },
-      { sno: 3, description: 'Switchboard face plates missing — Master Bedroom switch points' },
-      { sno: 4, description: 'Switchboard face plates missing — Bedroom 1 switch points' },
-      { sno: 5, description: 'Switchboard face plates missing — Bedroom 2 switch points' },
-      { sno: 6, description: 'Switchboard face plates missing — Home Office switch points' },
-      { sno: 7, description: 'Switchboard face plates missing — All Toilet switch points' },
-      { sno: 8, description: 'Switchboard face plates missing — Utility area switch points' },
-      { sno: 9, description: 'Switchboard face plates missing — Passage / Family Area switch points' },
-      { sno: 10, description: 'Gaps observed around Distribution Board (DB) panel edges' },
-      { sno: 11, description: 'DB cover drawing / circuit labeling documentation pending' }
-    ]
-  },
-  {
-    id: 'plumbing',
-    title: 'Plumbing & Sanitary Works',
-    icon: '🔧',
-    items: [
-      { sno: 1, description: 'Unpacked pipe sleeve penetrations — Master Bedroom Toilet' },
-      { sno: 2, description: 'Unpacked pipe sleeve penetrations — Bedroom 1 Toilet' },
-      { sno: 3, description: 'Unpacked pipe sleeve penetrations — Bedroom 2 Toilet' },
-      { sno: 4, description: 'Unpacked pipe sleeve penetrations — Kitchen (under sink)' },
-      { sno: 5, description: 'Unpacked pipe sleeve penetrations — Utility Area' },
-      { sno: 6, description: 'Gaps around wash basin fitting — Master Bedroom Toilet' },
-      { sno: 7, description: 'Gaps around wash basin fitting — Bedroom 1 Toilet' },
-      { sno: 8, description: 'Gaps around wash basin fitting — Bedroom 2 Toilet' },
-      { sno: 9, description: 'Gaps around water closet base — Master Bedroom Toilet' },
-      { sno: 10, description: 'Gaps around water closet base — Bedroom 2 Toilet' },
-      { sno: 11, description: 'External CP (chrome plated) fittings pending — Bedroom 4 area' }
+      { sno: 1, description: 'Skirting and flooring tiles gaps' },
+      { sno: 2, description: 'Skirting gaps' },
+      { sno: 3, description: 'Upstand slab Crack' },
+      { sno: 4, description: 'Shade variation' },
+      { sno: 5, description: 'Sealant not applied properly and wall edges not finished properly' },
+      { sno: 6, description: 'Mesh damages' },
+      { sno: 7, description: 'Scarthes On glass' },
+      { sno: 8, description: 'Railing rubber damage' },
+      { sno: 9, description: 'Stains on Railing' },
+      { sno: 10, description: 'Damping shade Observed on corners of walls' }
     ]
   }
 ];
 
+// DIMENSION DATA - From PDF
 const DIMENSION_DATA = [
   { area: 'Bedroom 1', brochure: '10 ft × 10 ft', measured: '10 ft × 10 ft', status: 'ok', comment: 'Satisfactory' },
   { area: 'Bedroom 1 Toilet', brochure: '4.6 ft × 8.3 ft', measured: '4.3 ft × 8 ft', status: 'warn', comment: 'Discrepancy — Smaller than brochure' },
@@ -257,8 +228,8 @@ const DIMENSION_DATA = [
   { area: 'Home Office', brochure: '10.2 ft × 10 ft', measured: '10 ft × 10 ft', status: 'ok', comment: 'Satisfactory' },
   { area: 'Kitchen', brochure: '7.9 ft × 12 ft', measured: '7.7 ft × 11.10 ft', status: 'ok', comment: 'Satisfactory' },
   { area: 'Utility', brochure: '4 ft × 7.9 ft', measured: '4 ft × 6.4 ft', status: 'warn', comment: 'Discrepancy — Smaller than brochure' },
-  { area: 'Drawing Room', brochure: '14.3 ft × 13 ft', measured: '14.2 ft × 13 ft', status: 'ok', comment: 'Satisfactory' },
-  { area: 'Family Area', brochure: '10 ft × 30.1 ft', measured: '10 ft × 27.8 ft', status: 'ok', comment: 'Satisfactory' },
+  { area: 'Drawing', brochure: '14.3 ft × 13 ft', measured: '14.2 ft × 13 ft', status: 'ok', comment: 'Satisfactory' },
+  { area: 'Family', brochure: '10 ft × 30.1 ft', measured: '10 ft × 27.8 ft', status: 'ok', comment: 'Satisfactory' },
   { area: 'Balcony', brochure: '10 ft × 6 ft', measured: '10 ft × 6.4 ft', status: 'ok', comment: 'Satisfactory' }
 ];
 
@@ -266,14 +237,11 @@ const uploadedImages = new Map();
 let totalItems = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Calculate total snag items for progress
     totalItems = SNAG_DATA.reduce((sum, section) => sum + section.items.length, 0);
-
     renderSnagSections();
     renderDimensionTable();
     updateProgress();
 
-    // View Navigation Listeners
     const btnToSnaglist = document.getElementById('view-snaglist-btn');
     if (btnToSnaglist) {
         btnToSnaglist.addEventListener('click', () => showView('snaglist-view'));
@@ -284,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnToDashboard.addEventListener('click', () => showView('dashboard-view'));
     }
 
-    // Modal Close Listeners
     const modal = document.getElementById('image-modal');
     const closeBtn = document.getElementById('modal-close');
     
@@ -375,7 +342,6 @@ function renderSnagSections() {
         sectionEl.appendChild(body);
         container.appendChild(sectionEl);
 
-        // Section Toggle Logic
         header.addEventListener('click', () => {
             const isActive = header.classList.contains('active');
             header.classList.toggle('active', !isActive);
@@ -383,11 +349,21 @@ function renderSnagSections() {
             body.style.display = isActive ? 'none' : 'block';
         });
 
-        // Initialize state
         body.style.display = 'none';
     });
 
-    // Event Delegation for File Uploads
+    // Open first section by default
+    const firstSection = container.querySelector('.snag-section');
+    if (firstSection) {
+        const firstBody = firstSection.querySelector('.section-body');
+        const firstHeader = firstSection.querySelector('.section-header');
+        if (firstBody) firstBody.style.display = 'block';
+        if (firstHeader) {
+            firstHeader.classList.add('active');
+            if (firstBody) firstBody.classList.add('open');
+        }
+    }
+
     container.addEventListener('change', (e) => {
         if (e.target.type === 'file') {
             const input = e.target;
@@ -422,7 +398,6 @@ function renderSnagSections() {
         }
     });
 
-    // Event Delegation for Image Modal
     container.addEventListener('click', (e) => {
         if (e.target.classList.contains('thumbnail')) {
             openModal(e.target.src);
@@ -433,7 +408,6 @@ function renderSnagSections() {
 function renderDimensionTable() {
     let dimensionSectionBody = document.querySelector('#dimension-section .section-body');
     
-    // If the dimension section isn't pre-defined in HTML, append it as the LAST section
     if (!dimensionSectionBody) {
         const container = document.getElementById('snag-sections-container');
         if (!container) return;
@@ -532,7 +506,7 @@ function openModal(imageSrc) {
     if (modal && modalImg) {
         modalImg.src = imageSrc;
         modal.classList.add('active');
-        modal.style.display = 'flex'; // Assuming flex for centering
+        modal.style.display = 'flex';
     }
 }
 

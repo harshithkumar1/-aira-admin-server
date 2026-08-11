@@ -15,91 +15,86 @@
     <script src="app.js?v=2" defer></script>
 </head>
 <body>
-    <!-- VIEW 1: Dashboard -->
+    <!-- VIEW 1: Dashboard (Page 1 of PDF) -->
     <div id="dashboard-view" class="view active">
         <header class="header">
             <div class="logo-section">
                 <div class="logo-icon">A</div>
                 <div class="logo-text">
                     <h1>AIRA VISION</h1>
-                    <p>Inspection Intelligence</p>
+                    <p>Home Inspection Report</p>
                 </div>
             </div>
             <div class="header-badge">📋 Report #AV-2026-0808</div>
         </header>
 
         <section class="hero-section">
-            <h2 class="hero-title">Urbanrise OnCloud33</h2>
-            <p class="hero-subtitle">Tower 2 — Flat No. 0608</p>
-            <span class="hero-badge">⚠️ RECTIFICATION REQUIRED</span>
+            <div class="hero-content">
+                <h2 class="hero-title">Urbanrise OnCloud33</h2>
+                <p class="hero-subtitle">Tower 2 — Flat No. 0608</p>
+                <span class="hero-badge">⚠️ RECTIFICATION REQUIRED</span>
+            </div>
         </section>
 
-        <section class="info-grid">
-            <!-- Card 1 -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <div class="info-card-icon icon-blue">👤</div>
-                    <h3>Client Name</h3>
+        <section class="info-section">
+            <div class="info-grid">
+                <!-- Card 1 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon icon-blue">👤</div>
+                        <h3>Client Name</h3>
+                    </div>
+                    <div class="info-card-value">Chaithanya</div>
                 </div>
-                <div class="info-card-value">Chaithanya</div>
-            </div>
-            
-            <!-- Card 2 -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <div class="info-card-icon icon-orange">🏗️</div>
-                    <h3>Project</h3>
+                
+                <!-- Card 2 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon icon-green">🏗️</div>
+                        <h3>Project</h3>
+                    </div>
+                    <div class="info-card-value">
+                        Urbanrise OnCloud33
+                        <span>Tower 2, Flat 0608</span>
+                    </div>
                 </div>
-                <div class="info-card-value">
-                    Urbanrise OnCloud33
-                    <span>Tower 2, Flat 0608</span>
-                </div>
-            </div>
 
-            <!-- Card 3 -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <div class="info-card-icon icon-green">🔍</div>
-                    <h3>Inspected By</h3>
+                <!-- Card 3 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon icon-orange">🔍</div>
+                        <h3>Inspected By</h3>
+                    </div>
+                    <div class="info-card-value">
+                        Shiva Sai Reddy
+                        <span>+91 9550234556</span>
+                    </div>
                 </div>
-                <div class="info-card-value">
-                    Shiva Sai Reddy
-                    <span>+91 9550234556</span>
-                </div>
-            </div>
 
-            <!-- Card 4 -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <div class="info-card-icon icon-blue">📅</div>
-                    <h3>Date of Inspection</h3>
+                <!-- Card 4 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon icon-purple">📅</div>
+                        <h3>Date of Inspection</h3>
+                    </div>
+                    <div class="info-card-value">August 8, 2026</div>
                 </div>
-                <div class="info-card-value">August 8, 2026</div>
-            </div>
 
-            <!-- Card 5 -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <div class="info-card-icon icon-orange">🏢</div>
-                    <h3>Inspection Firm</h3>
-                </div>
-                <div class="info-card-value">AIRA Vision Pvt. Ltd.</div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <div class="info-card-icon icon-red">📊</div>
-                    <h3>Handover Status</h3>
-                </div>
-                <div class="info-card-value">
-                    ⚠️ Rectification Required
-                    <span>Not recommended for final handover</span>
+                <!-- Card 5 -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon icon-teal">📊</div>
+                        <h3>Handover Status</h3>
+                    </div>
+                    <div class="info-card-value">
+                        ⚠️ Rectification Required
+                        <span>Not recommended for final handover</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="stats-row">
+        <section class="stats-section">
             <div class="stat-card">
                 <div class="stat-number">120+</div>
                 <div class="stat-label">Total Snag Points</div>
@@ -125,7 +120,7 @@
         </section>
     </div>
 
-    <!-- VIEW 2: Snag List -->
+    <!-- VIEW 2: Snag List (Pages 6-52 of PDF) -->
     <div id="snaglist-view" class="view">
         <header class="snag-header">
             <button id="back-to-dashboard-btn" class="back-button">← Back</button>

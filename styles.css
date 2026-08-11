@@ -12,7 +12,7 @@ html {
 }
 
 body {
-    background-color: #F0F3F7;
+    background-color: #F8FAFC;
     font-family: 'Inter', sans-serif;
     color: #1B2A4A;
 }
@@ -34,6 +34,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .logo-section {
@@ -57,13 +60,14 @@ body {
 
 .logo-text h1 {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 1px;
+    margin-bottom: 4px;
 }
 
 .logo-text p {
-    font-size: 0.8rem;
-    opacity: 0.7;
+    font-size: 0.75rem;
+    opacity: 0.8;
     letter-spacing: 2px;
     text-transform: uppercase;
 }
@@ -74,12 +78,13 @@ body {
     border-radius: 12px;
     padding: 8px 16px;
     font-size: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* DASHBOARD HERO */
+/* DASHBOARD HERO SECTION */
 .hero-section {
     background: linear-gradient(135deg, #0B1D3A, #1B3A5C, #2E86AB);
-    padding: 50px 30px;
+    padding: 60px 30px;
     text-align: center;
     color: white;
     position: relative;
@@ -97,36 +102,47 @@ body {
     border-radius: 50%;
 }
 
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
 .hero-title {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 800;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
 }
 
 .hero-subtitle {
-    font-size: 1rem;
-    opacity: 0.8;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 20px;
 }
 
 .hero-badge {
     display: inline-block;
-    margin-top: 20px;
     background: rgba(239, 68, 68, 0.2);
     border: 1px solid rgba(239, 68, 68, 0.4);
     color: #FCA5A5;
-    padding: 10px 24px;
+    padding: 12px 30px;
     border-radius: 30px;
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 1rem;
     animation: pulse 2s infinite;
 }
 
-/* INFO GRID */
+/* INFO SECTION */
+.info-section {
+    padding: 40px 30px 0;
+}
+
 .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    padding: 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -167,19 +183,24 @@ body {
     color: #2E86AB;
 }
 
-.icon-orange {
-    background: #FFF3E8;
-    color: #E8630A;
-}
-
 .icon-green {
     background: #ECFDF5;
     color: #10B981;
 }
 
-.icon-red {
-    background: #FEF2F2;
-    color: #EF4444;
+.icon-orange {
+    background: #FFF3E8;
+    color: #E8630A;
+}
+
+.icon-purple {
+    background: #F3E8FF;
+    color: #8B5CF6;
+}
+
+.icon-teal {
+    background: #E0F2FE;
+    color: #0EA5E9;
 }
 
 .info-card-header h3 {
@@ -203,12 +224,12 @@ body {
     font-size: 0.9rem;
 }
 
-/* STATS ROW */
-.stats-row {
+/* STATS SECTION */
+.stats-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
-    padding: 0 30px 30px;
+    padding: 40px 30px 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -239,7 +260,7 @@ body {
 /* CTA BUTTON */
 .cta-section {
     text-align: center;
-    padding: 20px 30px 50px;
+    padding: 40px 30px 50px;
 }
 
 .cta-button {
@@ -450,7 +471,7 @@ body {
 }
 
 .snag-table thead th:last-child {
-    width: 200px;
+    width: 120px;
     text-align: center;
 }
 
@@ -633,12 +654,16 @@ body {
         font-size: 1.5rem;
     }
     
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
     .info-grid {
         padding: 20px;
         gap: 12px;
     }
     
-    .stats-row {
+    .stats-section {
         padding: 0 20px 20px;
     }
     
