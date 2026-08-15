@@ -136,6 +136,7 @@ object PdfGenerator {
 
         // ===== ROOM HEADER + TABLE HEADER (FIX #4: better typography, centered title) =====
         fun drawRoomHeader(roomTitle: String) {
+            if (need(ROW_H + 36f)) { newPage() }
             // Room title - navy background block, centered text
             val titleH = 26f
             cv!!.drawRect(MARGIN, y, RIGHT, y + titleH, Paint().apply { this.color = color(C_NAVY) })
@@ -241,6 +242,7 @@ object PdfGenerator {
 
         // ===== SECTION HEADER (FIX #4: better visual hierarchy) =====
         fun drawSectionTitle(title: String) {
+            if (need(60f)) { newPage() }
             cv!!.drawRect(MARGIN, y, RIGHT, y + 28f, Paint().apply { this.color = color(C_NAVY) })
             val tp = paint(15f, C_WHITE, bold = true)
             val tw = tp.measureText(title)
@@ -481,6 +483,7 @@ object PdfGenerator {
                 }
                 y += 6f
 
+                if (need(30f)) { newPage() }
                 cv!!.drawText("Recommendation:", MARGIN + 8f, y, paint(10f, C_NAVY, bold = true))
                 y += 13f
                 y = wrap(c.rec, MARGIN + 8f, y, CONTENT_W - 8f, paint(10f, C_DARK))
