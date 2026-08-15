@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.AIRAVision" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/aira_navy</item>
+        <item name="android:navigationBarColor">@color/aira_navy</item>
+        <item name="android:windowBackground">@color/aira_bg</item>
+    </style>
+</resources>
