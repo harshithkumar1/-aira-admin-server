@@ -9,8 +9,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #f0f3f7; color: #1b2a4a; min-height: 100vh; }
-
-        /* Header */
         .header { background: #0b1d3a; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
         .header h1 { color: #fff; font-size: 20px; font-weight: 700; }
         .header h1 span { color: #e8630a; }
@@ -18,8 +16,6 @@
         .header-right .status { color: #10b981; font-size: 13px; font-weight: 500; }
         .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; }
         .logout-btn:hover { background: rgba(255,255,255,0.1); }
-
-        /* Login */
         .login-overlay { position: fixed; inset: 0; background: #0b1d3a; display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .login-box { background: #fff; padding: 40px; border-radius: 16px; width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         .login-box h2 { font-size: 22px; margin-bottom: 8px; color: #0b1d3a; }
@@ -29,8 +25,6 @@
         .login-box button { width: 100%; padding: 12px; background: #e8630a; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
         .login-box button:hover { background: #d45809; }
         .login-error { color: #ef4444; font-size: 13px; margin-bottom: 12px; display: none; }
-
-        /* Stats */
         .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 24px 32px 0; }
         .stat-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
         .stat-card .label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
@@ -40,8 +34,14 @@
         .stat-card .value.red { color: #ef4444; }
         .stat-card .value.orange { color: #e8630a; }
 
-        /* Toolbar */
-        .toolbar { display: flex; align-items: center; gap: 12px; padding: 20px 32px; }
+        .tabs { display: flex; gap: 0; padding: 20px 32px 0; }
+        .tab { padding: 10px 24px; border: none; background: #e5e7eb; color: #6b7280; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 10px 10px 0 0; transition: all 0.15s; }
+        .tab.active { background: #fff; color: #0b1d3a; }
+        .tab:hover:not(.active) { background: #d1d5db; }
+        .tab .count { background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 6px; }
+        .tab.active .count { background: #e8630a; color: #fff; }
+
+        .toolbar { display: flex; align-items: center; gap: 12px; padding: 16px 32px; }
         .search-box { flex: 1; position: relative; }
         .search-box input { width: 100%; padding: 10px 16px 10px 40px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 14px; outline: none; background: #fff; }
         .search-box input:focus { border-color: #e8630a; }
@@ -49,7 +49,6 @@
         .refresh-btn { padding: 10px 20px; background: #0b1d3a; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .refresh-btn:hover { background: #1b3a5c; }
 
-        /* Table */
         .table-wrapper { padding: 0 32px 32px; }
         .table-container { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
@@ -59,8 +58,14 @@
         tr:hover { background: #f8fafc; }
 
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
-        .badge.active { background: #d1fae5; color: #065f46; }
+        .badge.online { background: #d1fae5; color: #065f46; }
+        .badge.offline { background: #f3f4f6; color: #6b7280; }
         .badge.blocked { background: #fee2e2; color: #991b1b; }
+        .badge.temp-blocked { background: #fef3c7; color: #92400e; }
+
+        .online-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+        .online-dot.on { background: #10b981; box-shadow: 0 0 6px #10b981; }
+        .online-dot.off { background: #d1d5db; }
 
         .actions { display: flex; gap: 6px; }
         .btn { padding: 6px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
@@ -77,7 +82,6 @@
         .empty-state svg { margin-bottom: 12px; }
         .empty-state p { font-size: 15px; }
 
-        /* Modal */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 999; }
         .modal-overlay.active { display: flex; }
         .modal { background: #fff; border-radius: 16px; padding: 28px; width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
@@ -90,11 +94,13 @@
         .modal-actions .btn-cancel { padding: 8px 16px; background: #f3f4f6; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; }
         .modal-actions .btn-confirm { padding: 8px 16px; background: #e8630a; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
         .modal-actions .btn-confirm.danger { background: #ef4444; }
+
+        .blocked-info { font-size: 12px; color: #991b1b; margin-top: 4px; }
+        .expires { font-size: 11px; color: #92400e; font-style: italic; }
     </style>
 </head>
 <body>
 
-<!-- Login -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <h2>AIRA Vision Admin</h2>
@@ -105,7 +111,6 @@
     </div>
 </div>
 
-<!-- Main App -->
 <div id="mainApp" style="display:none;">
     <div class="header">
         <h1><span>AIRA</span> Vision Admin</h1>
@@ -117,9 +122,15 @@
 
     <div class="stats">
         <div class="stat-card"><div class="label">Total Users</div><div class="value blue" id="statTotal">0</div></div>
-        <div class="stat-card"><div class="label">Active</div><div class="value green" id="statActive">0</div></div>
+        <div class="stat-card"><div class="label">Online Now</div><div class="value green" id="statOnline">0</div></div>
+        <div class="stat-card"><div class="label">Offline</div><div class="value orange" id="statOffline">0</div></div>
         <div class="stat-card"><div class="label">Blocked</div><div class="value red" id="statBlocked">0</div></div>
-        <div class="stat-card"><div class="label">New Today</div><div class="value orange" id="statToday">0</div></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('all')" id="tabAll">All Users <span class="count" id="tabAllCount">0</span></button>
+        <button class="tab" onclick="switchTab('online')" id="tabOnline">Online <span class="count" id="tabOnlineCount">0</span></button>
+        <button class="tab" onclick="switchTab('blocked')" id="tabBlocked">Blocked <span class="count" id="tabBlockedCount">0</span></button>
     </div>
 
     <div class="toolbar">
@@ -147,18 +158,16 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="clientTableBody">
-                </tbody>
+                <tbody id="clientTableBody"></tbody>
             </table>
             <div class="empty-state" id="emptyState" style="display:none;">
                 <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>
-                <p>No clients registered yet</p>
+                <p>No users found</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Block Modal -->
 <div class="modal-overlay" id="blockModal">
     <div class="modal">
         <h3 id="blockModalTitle">Block User</h3>
@@ -185,10 +194,10 @@
     const API = window.location.origin;
     let adminToken = '';
     let allClients = [];
+    let currentTab = 'all';
 
     function authHeaders() { return { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken }; }
 
-    // --- Login ---
     function doLogin() {
         const token = document.getElementById('tokenInput').value.trim();
         if (!token) return;
@@ -200,9 +209,7 @@
                 document.getElementById('mainApp').style.display = 'block';
                 loadClients();
             })
-            .catch(() => {
-                document.getElementById('loginError').style.display = 'block';
-            });
+            .catch(() => { document.getElementById('loginError').style.display = 'block'; });
     }
 
     function doLogout() {
@@ -212,23 +219,54 @@
         document.getElementById('tokenInput').value = '';
     }
 
-    // --- Load Clients ---
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+        filterClients();
+    }
+
     function loadClients() {
         fetch(`${API}/api/admin/clients`, { headers: authHeaders() })
             .then(r => r.json())
             .then(clients => {
                 allClients = clients;
                 updateStats(clients);
-                renderTable(clients);
+                filterClients();
             });
     }
 
     function updateStats(clients) {
         const today = new Date().toISOString().slice(0, 10);
+        const online = clients.filter(c => c.is_online && !c.is_blocked).length;
+        const offline = clients.filter(c => !c.is_online && !c.is_blocked).length;
+        const blocked = clients.filter(c => c.is_blocked).length;
+
         document.getElementById('statTotal').textContent = clients.length;
-        document.getElementById('statActive').textContent = clients.filter(c => !c.is_blocked).length;
-        document.getElementById('statBlocked').textContent = clients.filter(c => c.is_blocked).length;
-        document.getElementById('statToday').textContent = clients.filter(c => c.registered_at && c.registered_at.startsWith(today)).length;
+        document.getElementById('statOnline').textContent = online;
+        document.getElementById('statOffline').textContent = offline;
+        document.getElementById('statBlocked').textContent = blocked;
+
+        document.getElementById('tabAllCount').textContent = clients.length;
+        document.getElementById('tabOnlineCount').textContent = online;
+        document.getElementById('tabBlockedCount').textContent = blocked;
+    }
+
+    function filterClients() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        let filtered = allClients;
+
+        if (currentTab === 'online') filtered = filtered.filter(c => c.is_online && !c.is_blocked);
+        else if (currentTab === 'blocked') filtered = filtered.filter(c => c.is_blocked);
+
+        if (q) {
+            filtered = filtered.filter(c =>
+                (c.device_id || '').toLowerCase().includes(q) ||
+                (c.device_model || '').toLowerCase().includes(q) ||
+                (c.app_version || '').toLowerCase().includes(q)
+            );
+        }
+        renderTable(filtered);
     }
 
     function renderTable(clients) {
@@ -236,16 +274,30 @@
         const empty = document.getElementById('emptyState');
         if (clients.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
         empty.style.display = 'none';
-        tbody.innerHTML = clients.map(c => `
-            <tr>
+        tbody.innerHTML = clients.map(c => {
+            let statusHtml = '';
+            if (c.is_blocked) {
+                const badgeClass = c.block_type === 'temporary' ? 'temp-blocked' : 'blocked';
+                statusHtml = `<span class="badge ${badgeClass}">Blocked (${esc(c.block_type)})</span>`;
+                if (c.block_type === 'temporary' && c.block_expires_at) {
+                    statusHtml += `<div class="expires">Expires: ${formatDate(c.block_expires_at)}</div>`;
+                }
+                if (c.block_reason) {
+                    statusHtml += `<div class="blocked-info">Reason: ${esc(c.block_reason)}</div>`;
+                }
+            } else if (c.is_online) {
+                statusHtml = `<span class="badge online"><span class="online-dot on"></span>Online</span>`;
+            } else {
+                statusHtml = `<span class="badge offline"><span class="online-dot off"></span>Offline</span>`;
+            }
+
+            return `<tr>
                 <td style="font-family:monospace;font-size:13px;">${esc(c.device_id)}</td>
                 <td>${esc(c.device_model || '-')}</td>
                 <td>${esc(c.app_version || '-')}</td>
                 <td>${formatDate(c.registered_at)}</td>
                 <td>${formatDate(c.last_seen_at)}</td>
-                <td>${c.is_blocked
-                    ? `<span class="badge blocked">Blocked (${esc(c.block_type)})</span>`
-                    : `<span class="badge active">Active</span>`}</td>
+                <td>${statusHtml}</td>
                 <td class="actions">
                     ${c.is_blocked
                         ? `<button class="btn btn-unblock" onclick="unblock('${esc(c.device_id)}')">Unblock</button>`
@@ -253,21 +305,10 @@
                            <button class="btn btn-block" onclick="openBlockModal('${esc(c.device_id)}','perm')">Block</button>`}
                     <button class="btn btn-delete" onclick="deleteClient('${esc(c.device_id)}')">Delete</button>
                 </td>
-            </tr>
-        `).join('');
+            </tr>`;
+        }).join('');
     }
 
-    function filterClients() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allClients.filter(c =>
-            (c.device_id || '').toLowerCase().includes(q) ||
-            (c.device_model || '').toLowerCase().includes(q) ||
-            (c.app_version || '').toLowerCase().includes(q)
-        );
-        renderTable(filtered);
-    }
-
-    // --- Block/Unblock ---
     function openBlockModal(deviceId, type) {
         document.getElementById('blockDeviceId').value = deviceId;
         document.getElementById('blockType').value = type === 'temp' ? 'temporary' : 'permanent';
@@ -282,8 +323,7 @@
     function closeBlockModal() { document.getElementById('blockModal').classList.remove('active'); }
 
     function toggleExpiry() {
-        const t = document.getElementById('blockType').value;
-        document.getElementById('expiryGroup').style.display = t === 'temporary' ? 'block' : 'none';
+        document.getElementById('expiryGroup').style.display = document.getElementById('blockType').value === 'temporary' ? 'block' : 'none';
     }
 
     function confirmBlock() {
@@ -315,11 +355,10 @@
         }).then(() => loadClients());
     }
 
-    // --- Helpers ---
     function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
     function formatDate(dt) {
         if (!dt) return '-';
-        try { return new Date(dt + 'Z').toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+        try { return new Date(dt.replace(' ', 'T') + 'Z').toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
         catch { return dt; }
     }
 </script>

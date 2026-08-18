@@ -26,6 +26,13 @@ function now() {
     return new Date().toISOString().replace('T', ' ').slice(0, 19);
 }
 
+function isOnline(lastSeenAt) {
+    if (!lastSeenAt) return false;
+    const lastSeen = new Date(lastSeenAt.replace(' ', 'T') + 'Z');
+    const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
+    return lastSeen > fiveMinAgo;
+}
+
 // --- Auth middleware ---
 const ADMIN_TOKEN = 'aira-admin-2024';
 
@@ -43,7 +50,7 @@ app.get('/', (req, res) => {
     res.json({ status: 'ok', server: 'AIRA Admin Server' });
 });
 
-// Register or heartbeat
+// Register device
 app.post('/api/device/register', (req, res) => {
     const { device_id, device_model, app_version } = req.body;
     if (!device_id) return res.status(400).json({ error: 'device_id required' });
@@ -75,6 +82,20 @@ app.post('/api/device/register', (req, res) => {
     res.json({ status: 'registered', blocked: false });
 });
 
+// Heartbeat - updates last_seen_at
+app.post('/api/device/heartbeat', (req, res) => {
+    const { device_id } = req.body;
+    if (!device_id) return res.status(400).json({ error: 'device_id required' });
+
+    const clients = loadDB();
+    const client = clients.find(c => c.device_id === device_id);
+    if (client) {
+        client.last_seen_at = now();
+        saveDB(clients);
+    }
+    res.json({ ok: true });
+});
+
 // Check block status
 app.post('/api/device/check-block', (req, res) => {
     const { device_id } = req.body;
@@ -84,7 +105,6 @@ app.post('/api/device/check-block', (req, res) => {
     const client = clients.find(c => c.device_id === device_id);
     if (!client || !client.is_blocked) return res.json({ blocked: false });
 
-    // Check temporary block expiry
     if (client.block_type === 'temporary' && client.block_expires_at) {
         if (new Date() > new Date(client.block_expires_at)) {
             client.is_blocked = false;
@@ -104,9 +124,26 @@ app.post('/api/device/check-block', (req, res) => {
 
 // --- Admin API ---
 
-// Get all clients
+// Get all clients with online/offline status
 app.get('/api/admin/clients', authMiddleware, (req, res) => {
-    res.json(loadDB());
+    const clients = loadDB();
+    const result = clients.map(c => ({
+        ...c,
+        is_online: isOnline(c.last_seen_at)
+    }));
+    res.json(result);
+});
+
+// Get only blocked clients
+app.get('/api/admin/blocked', authMiddleware, (req, res) => {
+    const clients = loadDB();
+    const blocked = clients
+        .filter(c => c.is_blocked)
+        .map(c => ({
+            ...c,
+            is_online: isOnline(c.last_seen_at)
+        }));
+    res.json(blocked);
 });
 
 // Block a client
