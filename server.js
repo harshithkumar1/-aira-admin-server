@@ -38,6 +38,11 @@ function authMiddleware(req, res, next) {
 
 // --- App-facing API ---
 
+// Health check
+app.get('/', (req, res) => {
+    res.json({ status: 'ok', server: 'AIRA Admin Server' });
+});
+
 // Register or heartbeat
 app.post('/api/device/register', (req, res) => {
     const { device_id, device_model, app_version } = req.body;
@@ -158,6 +163,6 @@ app.delete('/api/admin/client/:deviceId', authMiddleware, (req, res) => {
 });
 
 // --- Start ---
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
     console.log(`AIRA Admin Server running on port ${PORT}`);
 });
