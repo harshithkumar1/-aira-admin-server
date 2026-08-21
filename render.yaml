@@ -3,6 +3,7 @@ services:
     name: aira-admin-server
     runtime: node
     plan: free
+    rootDir: admin-server
     buildCommand: npm install
     startCommand: node server.js
     envVars:
