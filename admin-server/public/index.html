@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRA Vision - Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f0f3f7; color: #1b2a4a; min-height: 100vh; }
+        .header { background: #0b1d3a; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { color: #fff; font-size: 20px; font-weight: 700; }
+        .header h1 span { color: #e8630a; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .header-right .status { color: #10b981; font-size: 13px; font-weight: 500; }
+        .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+        .logout-btn:hover { background: rgba(255,255,255,0.1); }
+        .login-overlay { position: fixed; inset: 0; background: #0b1d3a; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .login-box { background: #fff; padding: 40px; border-radius: 16px; width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .login-box h2 { font-size: 22px; margin-bottom: 8px; color: #0b1d3a; }
+        .login-box p { font-size: 14px; color: #6b7280; margin-bottom: 24px; }
+        .login-box input { width: 100%; padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 14px; outline: none; margin-bottom: 16px; }
+        .login-box input:focus { border-color: #e8630a; }
+        .login-box button { width: 100%; padding: 12px; background: #e8630a; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
+        .login-box button:hover { background: #d45809; }
+        .login-error { color: #ef4444; font-size: 13px; margin-bottom: 12px; display: none; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 24px 32px 0; }
+        .stat-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .stat-card .label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; }
+        .stat-card .value.blue { color: #2e86ab; }
+        .stat-card .value.green { color: #10b981; }
+        .stat-card .value.red { color: #ef4444; }
+        .stat-card .value.orange { color: #e8630a; }
+
+        .tabs { display: flex; gap: 0; padding: 20px 32px 0; }
+        .tab { padding: 10px 24px; border: none; background: #e5e7eb; color: #6b7280; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 10px 10px 0 0; transition: all 0.15s; }
+        .tab.active { background: #fff; color: #0b1d3a; }
+        .tab:hover:not(.active) { background: #d1d5db; }
+        .tab .count { background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 6px; }
+        .tab.active .count { background: #e8630a; color: #fff; }
+
+        .toolbar { display: flex; align-items: center; gap: 12px; padding: 16px 32px; }
+        .search-box { flex: 1; position: relative; }
+        .search-box input { width: 100%; padding: 10px 16px 10px 40px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 14px; outline: none; background: #fff; }
+        .search-box input:focus { border-color: #e8630a; }
+        .search-box svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+        .refresh-btn { padding: 10px 20px; background: #0b1d3a; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .refresh-btn:hover { background: #1b3a5c; }
+
+        .table-wrapper { padding: 0 32px 32px; }
+        .table-container { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e5e7eb; }
+        td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid #f0f3f7; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #f8fafc; }
+
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .badge.online { background: #d1fae5; color: #065f46; }
+        .badge.offline { background: #f3f4f6; color: #6b7280; }
+        .badge.blocked { background: #fee2e2; color: #991b1b; }
+        .badge.temp-blocked { background: #fef3c7; color: #92400e; }
+
+        .online-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+        .online-dot.on { background: #10b981; box-shadow: 0 0 6px #10b981; }
+        .online-dot.off { background: #d1d5db; }
+
+        .actions { display: flex; gap: 6px; }
+        .btn { padding: 6px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+        .btn-block { background: #fee2e2; color: #991b1b; }
+        .btn-block:hover { background: #fecaca; }
+        .btn-temp { background: #fef3c7; color: #92400e; }
+        .btn-temp:hover { background: #fde68a; }
+        .btn-unblock { background: #d1fae5; color: #065f46; }
+        .btn-unblock:hover { background: #a7f3d0; }
+        .btn-delete { background: #f3f4f6; color: #6b7280; }
+        .btn-delete:hover { background: #e5e7eb; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; }
+        .empty-state svg { margin-bottom: 12px; }
+        .empty-state p { font-size: 15px; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 999; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: #fff; border-radius: 16px; padding: 28px; width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .modal h3 { font-size: 18px; margin-bottom: 16px; }
+        .modal label { font-size: 13px; font-weight: 500; color: #374151; display: block; margin-bottom: 6px; }
+        .modal input, .modal select, .modal textarea { width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; outline: none; margin-bottom: 14px; font-family: inherit; }
+        .modal input:focus, .modal select:focus, .modal textarea:focus { border-color: #e8630a; }
+        .modal textarea { resize: vertical; min-height: 60px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+        .modal-actions .btn-cancel { padding: 8px 16px; background: #f3f4f6; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; }
+        .modal-actions .btn-confirm { padding: 8px 16px; background: #e8630a; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .modal-actions .btn-confirm.danger { background: #ef4444; }
+
+        .blocked-info { font-size: 12px; color: #991b1b; margin-top: 4px; }
+        .expires { font-size: 11px; color: #92400e; font-style: italic; }
+        .badge.unblock { background: #d1fae5; color: #065f46; }
+        #activityTable td { font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+        <h2>AIRA Vision Admin</h2>
+        <p>Enter admin token to continue</p>
+        <div class="login-error" id="loginError">Invalid token. Try again.</div>
+        <input type="password" id="tokenInput" placeholder="Admin token" onkeydown="if(event.key==='Enter')doLogin()">
+        <button onclick="doLogin()">Sign In</button>
+    </div>
+</div>
+
+<div id="mainApp" style="display:none;">
+    <div class="header">
+        <h1><span>AIRA</span> Vision Admin</h1>
+        <div class="header-right">
+            <span class="status">Server Connected</span>
+            <button class="logout-btn" onclick="doLogout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card"><div class="label">Total Users</div><div class="value blue" id="statTotal">0</div></div>
+        <div class="stat-card"><div class="label">Online Now</div><div class="value green" id="statOnline">0</div></div>
+        <div class="stat-card"><div class="label">Offline</div><div class="value orange" id="statOffline">0</div></div>
+        <div class="stat-card"><div class="label">Blocked</div><div class="value red" id="statBlocked">0</div></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('all')" id="tabAll">All Users <span class="count" id="tabAllCount">0</span></button>
+        <button class="tab" onclick="switchTab('online')" id="tabOnline">Online <span class="count" id="tabOnlineCount">0</span></button>
+        <button class="tab" onclick="switchTab('blocked')" id="tabBlocked">Blocked <span class="count" id="tabBlockedCount">0</span></button>
+        <button class="tab" onclick="switchTab('activity')" id="tabActivity">Activity Log <span class="count" id="tabActivityCount">0</span></button>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="searchInput" placeholder="Search by device ID, model..." oninput="filterClients()">
+        </div>
+        <button class="refresh-btn" onclick="loadClients()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.56"/><path d="M21 3v6h-6"/></svg>
+            Refresh
+        </button>
+    </div>
+
+    <div class="table-wrapper">
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th>Device ID</th>
+                        <th>Model</th>
+                        <th>App Version</th>
+                        <th>Registered</th>
+                        <th>Last Seen</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody"></tbody>
+            </table>
+            <table id="activityTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Device ID</th>
+                        <th>Action</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="activityTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>
+                <p>No users found</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="blockModal">
+    <div class="modal">
+        <h3 id="blockModalTitle">Block User</h3>
+        <input type="hidden" id="blockDeviceId">
+        <label>Block Type</label>
+        <select id="blockType" onchange="toggleExpiry()">
+            <option value="permanent">Permanent</option>
+            <option value="temporary">Temporary</option>
+        </select>
+        <div id="expiryGroup" style="display:none;">
+            <label>Duration (hours)</label>
+            <input type="number" id="blockDuration" value="24" min="1" max="8760">
+        </div>
+        <label>Reason</label>
+        <textarea id="blockReason" placeholder="Optional reason..."></textarea>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeBlockModal()">Cancel</button>
+            <button class="btn-confirm danger" id="blockConfirmBtn" onclick="confirmBlock()">Block</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API = window.location.origin;
+    let adminToken = '';
+    let allClients = [];
+    let allActivities = [];
+    let currentTab = 'all';
+
+    function authHeaders() { return { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken }; }
+
+    function doLogin() {
+        const token = document.getElementById('tokenInput').value.trim();
+        if (!token) return;
+        adminToken = token;
+        fetch(`${API}/api/admin/clients`, { headers: authHeaders() })
+            .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+            .then(() => {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                loadClients();
+                loadActivity();
+            })
+            .catch(() => { document.getElementById('loginError').style.display = 'block'; });
+    }
+
+    function doLogout() {
+        adminToken = '';
+        document.getElementById('mainApp').style.display = 'none';
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('tokenInput').value = '';
+    }
+
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+        
+        if (tab === 'activity') {
+            document.getElementById('clientTable').style.display = 'none';
+            document.getElementById('activityTable').style.display = 'table';
+            renderActivityTable(allActivities);
+        } else {
+            document.getElementById('clientTable').style.display = 'table';
+            document.getElementById('activityTable').style.display = 'none';
+            filterClients();
+        }
+    }
+
+    function loadClients() {
+        fetch(`${API}/api/admin/clients`, { headers: authHeaders() })
+            .then(r => r.json())
+            .then(clients => {
+                allClients = clients;
+                updateStats(clients);
+                filterClients();
+            });
+    }
+
+    function loadActivity() {
+        fetch(`${API}/api/admin/activity?limit=200`, { headers: authHeaders() })
+            .then(r => r.json())
+            .then(activities => {
+                allActivities = activities;
+                document.getElementById('tabActivityCount').textContent = activities.length;
+            });
+    }
+
+    function updateStats(clients) {
+        const online = clients.filter(c => c.is_online && !c.is_blocked).length;
+        const offline = clients.filter(c => !c.is_online && !c.is_blocked).length;
+        const blocked = clients.filter(c => c.is_blocked).length;
+
+        document.getElementById('statTotal').textContent = clients.length;
+        document.getElementById('statOnline').textContent = online;
+        document.getElementById('statOffline').textContent = offline;
+        document.getElementById('statBlocked').textContent = blocked;
+
+        document.getElementById('tabAllCount').textContent = clients.length;
+        document.getElementById('tabOnlineCount').textContent = online;
+        document.getElementById('tabBlockedCount').textContent = blocked;
+    }
+
+    function filterClients() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        let filtered = allClients;
+
+        if (currentTab === 'online') filtered = filtered.filter(c => c.is_online && !c.is_blocked);
+        else if (currentTab === 'blocked') filtered = filtered.filter(c => c.is_blocked);
+
+        if (q) {
+            filtered = filtered.filter(c =>
+                (c.device_id || '').toLowerCase().includes(q) ||
+                (c.device_model || '').toLowerCase().includes(q) ||
+                (c.app_version || '').toLowerCase().includes(q)
+            );
+        }
+        renderTable(filtered);
+    }
+
+    function renderTable(clients) {
+        const tbody = document.getElementById('clientTableBody');
+        const empty = document.getElementById('emptyState');
+        if (clients.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+        empty.style.display = 'none';
+        tbody.innerHTML = clients.map(c => {
+            let statusHtml = '';
+            if (c.is_blocked) {
+                const badgeClass = c.block_type === 'temporary' ? 'temp-blocked' : 'blocked';
+                statusHtml = `<span class="badge ${badgeClass}">Blocked (${esc(c.block_type)})</span>`;
+                if (c.block_type === 'temporary' && c.block_expires_at) {
+                    statusHtml += `<div class="expires">Expires: ${formatDate(c.block_expires_at)}</div>`;
+                }
+                if (c.block_reason) {
+                    statusHtml += `<div class="blocked-info">Reason: ${esc(c.block_reason)}</div>`;
+                }
+            } else if (c.is_online) {
+                statusHtml = `<span class="badge online"><span class="online-dot on"></span>Online</span>`;
+            } else {
+                statusHtml = `<span class="badge offline"><span class="online-dot off"></span>Offline</span>`;
+            }
+
+            return `<tr>
+                <td style="font-family:monospace;font-size:13px;">${esc(c.device_id)}</td>
+                <td>${esc(c.device_model || '-')}</td>
+                <td>${esc(c.app_version || '-')}</td>
+                <td>${formatDate(c.registered_at)}</td>
+                <td>${formatDate(c.last_seen_at)}</td>
+                <td>${statusHtml}</td>
+                <td class="actions">
+                    ${c.is_blocked
+                        ? `<button class="btn btn-unblock" onclick="unblock('${esc(c.device_id)}')">Unblock</button>`
+                        : `<button class="btn btn-temp" onclick="openBlockModal('${esc(c.device_id)}','temp')">Temp Block</button>
+                           <button class="btn btn-block" onclick="openBlockModal('${esc(c.device_id)}','perm')">Block</button>`}
+                    <button class="btn btn-delete" onclick="deleteClient('${esc(c.device_id)}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    function renderActivityTable(activities) {
+        const tbody = document.getElementById('activityTableBody');
+        const empty = document.getElementById('emptyState');
+        if (activities.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+        empty.style.display = 'none';
+        tbody.innerHTML = activities.map(a => {
+            let actionBadge = '';
+            switch(a.action) {
+                case 'register': actionBadge = '<span class="badge online">Register</span>'; break;
+                case 'heartbeat': actionBadge = '<span class="badge" style="background:#dbeafe;color:#1e40af;">Heartbeat</span>'; break;
+                case 'check_block': actionBadge = `<span class="badge ${a.result === 'blocked' ? 'blocked' : 'offline'}">Check Block</span>`; break;
+                case 'blocked': actionBadge = '<span class="badge blocked">Blocked</span>'; break;
+                case 'unblocked': actionBadge = '<span class="badge unblock">Unblocked</span>'; break;
+                case 'deleted': actionBadge = '<span class="badge" style="background:#f3f4f6;color:#6b7280;">Deleted</span>'; break;
+                default: actionBadge = `<span class="badge">${a.action}</span>`;
+            }
+            
+            let details = '';
+            if (a.status) details += `Status: ${a.status} `;
+            if (a.block_type) details += `Type: ${a.block_type} `;
+            if (a.reason) details += `Reason: ${a.reason} `;
+            if (a.duration_hours) details += `Duration: ${a.duration_hours}h `;
+            if (a.device_model) details += `Model: ${a.device_model} `;
+
+            return `<tr>
+                <td>${formatDate(a.timestamp)}</td>
+                <td style="font-family:monospace;font-size:13px;">${esc(a.device_id)}</td>
+                <td>${actionBadge}</td>
+                <td style="font-size:12px;color:#6b7280;">${esc(details.trim() || '-')}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function openBlockModal(deviceId, type) {
+        document.getElementById('blockDeviceId').value = deviceId;
+        document.getElementById('blockType').value = type === 'temp' ? 'temporary' : 'permanent';
+        document.getElementById('blockReason').value = '';
+        document.getElementById('blockDuration').value = 24;
+        toggleExpiry();
+        document.getElementById('blockModalTitle').textContent = type === 'temp' ? 'Temporary Block' : 'Permanent Block';
+        document.getElementById('blockConfirmBtn').textContent = type === 'temp' ? 'Temp Block' : 'Block';
+        document.getElementById('blockModal').classList.add('active');
+    }
+
+    function closeBlockModal() { document.getElementById('blockModal').classList.remove('active'); }
+
+    function toggleExpiry() {
+        document.getElementById('expiryGroup').style.display = document.getElementById('blockType').value === 'temporary' ? 'block' : 'none';
+    }
+
+    function confirmBlock() {
+        const deviceId = document.getElementById('blockDeviceId').value;
+        const blockType = document.getElementById('blockType').value;
+        const reason = document.getElementById('blockReason').value;
+        const duration = parseInt(document.getElementById('blockDuration').value) || 24;
+
+        fetch(`${API}/api/admin/block`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ device_id: deviceId, block_type: blockType, reason, duration_hours: blockType === 'temporary' ? duration : undefined })
+        }).then(() => { closeBlockModal(); loadClients(); loadActivity(); });
+    }
+
+    function unblock(deviceId) {
+        fetch(`${API}/api/admin/unblock`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ device_id: deviceId })
+        }).then(() => { loadClients(); loadActivity(); });
+    }
+
+    function deleteClient(deviceId) {
+        if (!confirm(`Delete device ${deviceId}? This cannot be undone.`)) return;
+        fetch(`${API}/api/admin/client/${encodeURIComponent(deviceId)}`, {
+            method: 'DELETE',
+            headers: authHeaders()
+        }).then(() => { loadClients(); loadActivity(); });
+    }
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function formatDate(dt) {
+        if (!dt) return '-';
+        try { return new Date(dt.replace(' ', 'T') + 'Z').toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+        catch { return dt; }
+    }
+
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        if (adminToken) {
+            loadClients();
+            loadActivity();
+        }
+    }, 30000);
+</script>
+</body>
+</html>
